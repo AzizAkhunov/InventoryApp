@@ -10,5 +10,8 @@ namespace InventoryApp.Server.Entities
         public bool IsBlocked { get; set; }
 
         public ICollection<Inventory> OwnedInventories { get; set; } = new List<Inventory>();
+        public ICollection<InventoryAccess> AccessibleInventories { get; set; } = new List<InventoryAccess>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
     }
 }
