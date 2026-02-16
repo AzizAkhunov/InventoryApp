@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace InventoryApp.Server.Entities
+namespace InventoryApp.Domain.Entities
 {
     public class User : BaseEntity
     {

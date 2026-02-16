@@ -1,4 +1,4 @@
-﻿namespace InventoryApp.Server.Entities
+﻿namespace InventoryApp.Domain.Entities
 {
     public class Tag : BaseEntity
     {

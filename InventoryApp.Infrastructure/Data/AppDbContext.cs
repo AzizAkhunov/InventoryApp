@@ -1,7 +1,7 @@
-﻿using InventoryApp.Server.Entities;
+﻿using InventoryApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryApp.Server.Data
+namespace InventoryApp.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {
