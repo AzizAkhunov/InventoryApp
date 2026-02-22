@@ -8,7 +8,6 @@ namespace InventoryApp.Domain.Entities
         public string UserName { get; set; } = string.Empty;
         public bool IsAdmin { get; set; }
         public bool IsBlocked { get; set; }
-
         public ICollection<Inventory> OwnedInventories { get; set; } = new List<Inventory>();
         public ICollection<InventoryAccess> AccessibleInventories { get; set; } = new List<InventoryAccess>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
