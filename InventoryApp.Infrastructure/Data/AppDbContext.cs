@@ -9,7 +9,6 @@ namespace InventoryApp.Infrastructure.Data
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Inventory> Inventories => Set<Inventory>();
-        public DbSet<InventoryField> InventoryFields => Set<InventoryField>();
         public DbSet<Item> Items => Set<Item>();
         public DbSet<InventoryAccess> InventoryAccesses => Set<InventoryAccess>();
         public DbSet<Tag> Tags => Set<Tag>();
@@ -39,12 +38,6 @@ namespace InventoryApp.Infrastructure.Data
                 .Property(i => i.Version)
                 .IsConcurrencyToken();
 
-            //INVENTORY FIELD
-            modelBuilder.Entity<InventoryField>()
-           .HasOne(f => f.Inventory)
-           .WithMany(i => i.InventoryFields)
-           .HasForeignKey(f => f.InventoryId)
-           .OnDelete(DeleteBehavior.Cascade);
 
             //ITEM
             modelBuilder.Entity<Item>()

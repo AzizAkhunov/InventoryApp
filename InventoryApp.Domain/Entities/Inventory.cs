@@ -16,7 +16,6 @@
         public int Version { get; set; }
 
         public ICollection<Item> Items { get; set; } = new List<Item>();
-        public ICollection<InventoryField> InventoryFields { get; set; } = new List<InventoryField>();
         public ICollection<InventoryAccess> AccessList { get; set; } = new List<InventoryAccess>();
         public ICollection<InventoryTag> InventoryTags { get; set; } = new List<InventoryTag>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
