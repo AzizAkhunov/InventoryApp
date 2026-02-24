@@ -39,6 +39,18 @@ namespace InventoryApp.Infrastructure.Data
                 .Property(i => i.Version)
                 .IsConcurrencyToken();
 
+            //временно для проверки
+            modelBuilder.Entity<User>().HasData(
+                new User
+                    {
+                        Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                        Email = "admin@test.com",
+                        UserName = "admin",
+                        IsAdmin = true,
+                        IsBlocked = false,
+                        CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                }
+            );
 
             //ITEM
             modelBuilder.Entity<Item>()
