@@ -16,6 +16,7 @@ namespace InventoryApp.Infrastructure.Data
         public DbSet<Comment> Comments => Set<Comment>();
         public DbSet<Like> Likes => Set<Like>();
 
+        public DbSet<Category> Categories => Set<Category>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +99,26 @@ namespace InventoryApp.Infrastructure.Data
                 .HasOne(it => it.Tag)
                 .WithMany(t => t.InventoryTags)
                 .HasForeignKey(it => it.TagId);
+
+            // CATEGORY
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne(i => i.Category)
+                .WithMany(c => c.Inventories)
+                .HasForeignKey(i => i.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Equipment" },
+                new Category { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "Furniture" },
+                new Category { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Name = "Books" },
+                new Category { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), Name = "Other" }
+            );
 
             //COMMENT
 
