@@ -1,3 +1,5 @@
+using InventoryApp.Application.Interfaces;
+using InventoryApp.Application.Services;
 using InventoryApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 var app = builder.Build();
 
