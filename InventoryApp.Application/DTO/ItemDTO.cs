@@ -1,6 +1,6 @@
 ﻿namespace InventoryApp.Application.DTO
 {
-    public class ItemDTO
+    public class ItemDto
     {
         public Guid Id { get; set; }
 
