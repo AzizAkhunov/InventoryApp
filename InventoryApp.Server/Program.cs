@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IItemService, ItemService>();
 
 var app = builder.Build();
 
