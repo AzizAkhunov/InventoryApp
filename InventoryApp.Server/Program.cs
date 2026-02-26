@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IInventoryAccessService, InventoryAccessService>();
 
 var app = builder.Build();
 
