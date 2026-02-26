@@ -85,6 +85,22 @@ namespace InventoryApp.Application.Services
 
         public async Task<ItemDto> CreateAsync(Guid userId, ItemDto dto)
         {
+            var inventory = await _context.Inventories
+                .Include(i => i.AccessList)
+                .FirstOrDefaultAsync(i => i.Id == dto.InventoryId);
+
+            if (inventory == null)
+                throw new Exception("Inventory not found");
+
+            // Verifying access rights: owner, public, or in access list
+            var hasAccess =
+                inventory.OwnerId == userId ||
+                inventory.IsPublic ||
+                inventory.AccessList.Any(a => a.UserId == userId);
+
+            if (!hasAccess)
+                throw new UnauthorizedAccessException();
+
             var item = new Item
             {
                 Id = Guid.NewGuid(),
@@ -129,6 +145,18 @@ namespace InventoryApp.Application.Services
 
             if (item == null)
                 return null;
+
+            var inventory = await _context.Inventories
+                .Include(i => i.AccessList)
+                .FirstOrDefaultAsync(i => i.Id == item.InventoryId);
+
+            var hasAccess =
+                inventory.OwnerId == userId ||
+                inventory.IsPublic ||
+                inventory.AccessList.Any(a => a.UserId == userId);
+
+            if (!hasAccess)
+                throw new UnauthorizedAccessException();
 
             item.CustomId = dto.CustomId;
             item.Text1 = dto.Text1;

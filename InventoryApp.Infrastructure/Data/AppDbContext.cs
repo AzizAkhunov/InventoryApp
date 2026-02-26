@@ -88,8 +88,7 @@ namespace InventoryApp.Infrastructure.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<InventoryAccess>()
-                .HasIndex(a => new { a.InventoryId, a.UserId })
-                .IsUnique();
+                .HasKey(x => new { x.InventoryId, x.UserId });
 
 
             //TAG (unique name)

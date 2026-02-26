@@ -6,38 +6,51 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitWithSeed : Migration
+    public partial class FixAccessKey : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_InventoryAccesses",
+                table: "InventoryAccesses");
+
+            migrationBuilder.DropIndex(
+                name: "IX_InventoryAccesses_InventoryId_UserId",
+                table: "InventoryAccesses");
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_InventoryAccesses",
+                table: "InventoryAccesses",
+                columns: new[] { "InventoryId", "UserId" });
+
             migrationBuilder.UpdateData(
                 table: "Categories",
                 keyColumn: "Id",
                 keyValue: new Guid("11111111-1111-1111-1111-111111111111"),
                 column: "CreatedAt",
-                value: new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3006));
+                value: new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3970));
 
             migrationBuilder.UpdateData(
                 table: "Categories",
                 keyColumn: "Id",
                 keyValue: new Guid("22222222-2222-2222-2222-222222222222"),
                 column: "CreatedAt",
-                value: new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3019));
+                value: new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3973));
 
             migrationBuilder.UpdateData(
                 table: "Categories",
                 keyColumn: "Id",
                 keyValue: new Guid("33333333-3333-3333-3333-333333333333"),
                 column: "CreatedAt",
-                value: new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3020));
+                value: new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3975));
 
             migrationBuilder.UpdateData(
                 table: "Categories",
                 keyColumn: "Id",
                 keyValue: new Guid("44444444-4444-4444-4444-444444444444"),
                 column: "CreatedAt",
-                value: new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3022));
+                value: new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3976));
 
             migrationBuilder.InsertData(
                 table: "Users",
@@ -48,10 +61,19 @@ namespace InventoryApp.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_InventoryAccesses",
+                table: "InventoryAccesses");
+
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_InventoryAccesses",
+                table: "InventoryAccesses",
+                column: "Id");
 
             migrationBuilder.UpdateData(
                 table: "Categories",
@@ -80,6 +102,12 @@ namespace InventoryApp.Infrastructure.Migrations
                 keyValue: new Guid("44444444-4444-4444-4444-444444444444"),
                 column: "CreatedAt",
                 value: new DateTime(2026, 2, 24, 7, 41, 51, 744, DateTimeKind.Utc).AddTicks(392));
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryAccesses_InventoryId_UserId",
+                table: "InventoryAccesses",
+                columns: new[] { "InventoryId", "UserId" },
+                unique: true);
         }
     }
 }

@@ -49,25 +49,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3006),
+                            CreatedAt = new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3970),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3019),
+                            CreatedAt = new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3973),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3020),
+                            CreatedAt = new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3975),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 2, 24, 8, 39, 13, 141, DateTimeKind.Utc).AddTicks(3022),
+                            CreatedAt = new DateTime(2026, 2, 26, 9, 47, 34, 193, DateTimeKind.Utc).AddTicks(3976),
                             Name = "Other"
                         });
                 });
@@ -203,28 +203,24 @@ namespace InventoryApp.Infrastructure.Migrations
 
             modelBuilder.Entity("InventoryApp.Domain.Entities.InventoryAccess", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("InventoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("InventoryId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
+                    b.HasKey("InventoryId", "UserId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("InventoryId", "UserId")
-                        .IsUnique();
 
                     b.ToTable("InventoryAccesses");
                 });
