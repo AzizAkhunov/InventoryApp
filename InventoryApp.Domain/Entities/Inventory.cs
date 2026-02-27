@@ -51,5 +51,7 @@
         public ICollection<InventoryAccess> AccessList { get; set; } = new List<InventoryAccess>();
         public ICollection<InventoryTag> InventoryTags { get; set; } = new List<InventoryTag>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+        public ICollection<InventoryIdElement> IdElements { get; set; } = new List<InventoryIdElement>();
     }
 }

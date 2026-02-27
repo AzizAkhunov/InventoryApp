@@ -17,6 +17,7 @@ namespace InventoryApp.Infrastructure.Data
         public DbSet<Like> Likes => Set<Like>();
 
         public DbSet<Category> Categories => Set<Category>();
+        public DbSet<InventoryIdElement> InventoryIdElements => Set<InventoryIdElement>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -163,6 +164,18 @@ namespace InventoryApp.Infrastructure.Data
             modelBuilder.Entity<Like>()
                 .HasIndex(l => new { l.ItemId, l.UserId })
                 .IsUnique();
+
+            //InventoryID ELEMENTS
+            modelBuilder.Entity<InventoryIdElement>()
+                .HasOne(e => e.Inventory)
+                .WithMany(i => i.IdElements)
+                .HasForeignKey(e => e.InventoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<InventoryIdElement>()
+                .HasIndex(e => new { e.InventoryId, e.Order })
+                .IsUnique();
+
         }
     }
 }
