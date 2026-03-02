@@ -176,6 +176,20 @@ namespace InventoryApp.Infrastructure.Data
                 .HasIndex(e => new { e.InventoryId, e.Order })
                 .IsUnique();
 
+
+            //DiscussionPost
+            modelBuilder.Entity<DiscussionPost>()
+                .HasOne(p => p.Inventory)
+                .WithMany()
+                .HasForeignKey(p => p.InventoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DiscussionPost>()
+                .HasOne(p => p.Author)
+                .WithMany()
+                .HasForeignKey(p => p.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
