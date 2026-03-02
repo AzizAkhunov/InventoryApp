@@ -15,7 +15,7 @@ namespace InventoryApp.Infrastructure.Data
         public DbSet<InventoryTag> InventoryTags => Set<InventoryTag>();
         public DbSet<Comment> Comments => Set<Comment>();
         public DbSet<Like> Likes => Set<Like>();
-
+        public DbSet<DiscussionPost> DiscussionPosts => Set<DiscussionPost>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<InventoryIdElement> InventoryIdElements => Set<InventoryIdElement>();
 
