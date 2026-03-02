@@ -19,8 +19,7 @@ namespace InventoryApp.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,8 +32,7 @@ namespace InventoryApp.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +48,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     UserName = table.Column<string>(type: "text", nullable: false),
                     IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
                     IsBlocked = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,8 +85,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     CustomBool2Name = table.Column<string>(type: "text", nullable: true),
                     CustomBool3Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     CustomBool3Name = table.Column<string>(type: "text", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,8 +112,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     InventoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Content = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,18 +132,44 @@ namespace InventoryApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventoryAccesses",
+                name: "DiscussionPosts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     InventoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventoryAccesses", x => x.Id);
+                    table.PrimaryKey("PK_DiscussionPosts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DiscussionPosts_Inventories_InventoryId",
+                        column: x => x.InventoryId,
+                        principalTable: "Inventories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DiscussionPosts_Users_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryAccesses",
+                columns: table => new
+                {
+                    InventoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryAccesses", x => new { x.InventoryId, x.UserId });
                     table.ForeignKey(
                         name: "FK_InventoryAccesses_Inventories_InventoryId",
                         column: x => x.InventoryId,
@@ -159,6 +180,29 @@ namespace InventoryApp.Infrastructure.Migrations
                         name: "FK_InventoryAccesses_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryIdElements",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    InventoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Order = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    FixedText = table.Column<string>(type: "text", nullable: true),
+                    Padding = table.Column<int>(type: "integer", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryIdElements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InventoryIdElements_Inventories_InventoryId",
+                        column: x => x.InventoryId,
+                        principalTable: "Inventories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -211,8 +255,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     Doc1 = table.Column<string>(type: "text", nullable: true),
                     Doc2 = table.Column<string>(type: "text", nullable: true),
                     Doc3 = table.Column<string>(type: "text", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -238,8 +281,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -260,14 +302,19 @@ namespace InventoryApp.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "CreatedAt", "Name", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 2, 24, 7, 41, 51, 744, DateTimeKind.Utc).AddTicks(379), "Equipment", null },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 2, 24, 7, 41, 51, 744, DateTimeKind.Utc).AddTicks(389), "Furniture", null },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 2, 24, 7, 41, 51, 744, DateTimeKind.Utc).AddTicks(391), "Books", null },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 2, 24, 7, 41, 51, 744, DateTimeKind.Utc).AddTicks(392), "Other", null }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7853), "Equipment" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7861), "Furniture" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7862), "Books" },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7863), "Other" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "Email", "IsAdmin", "IsBlocked", "UserName" },
+                values: new object[] { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@test.com", true, false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",
@@ -286,6 +333,16 @@ namespace InventoryApp.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DiscussionPosts_AuthorId",
+                table: "DiscussionPosts",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiscussionPosts_InventoryId",
+                table: "DiscussionPosts",
+                column: "InventoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inventories_CategoryId",
                 table: "Inventories",
                 column: "CategoryId");
@@ -296,15 +353,15 @@ namespace InventoryApp.Infrastructure.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InventoryAccesses_InventoryId_UserId",
-                table: "InventoryAccesses",
-                columns: new[] { "InventoryId", "UserId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_InventoryAccesses_UserId",
                 table: "InventoryAccesses",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryIdElements_InventoryId_Order",
+                table: "InventoryIdElements",
+                columns: new[] { "InventoryId", "Order" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_InventoryTags_TagId",
@@ -353,7 +410,13 @@ namespace InventoryApp.Infrastructure.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "DiscussionPosts");
+
+            migrationBuilder.DropTable(
                 name: "InventoryAccesses");
+
+            migrationBuilder.DropTable(
+                name: "InventoryIdElements");
 
             migrationBuilder.DropTable(
                 name: "InventoryTags");

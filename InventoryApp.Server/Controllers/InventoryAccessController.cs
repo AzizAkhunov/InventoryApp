@@ -1,5 +1,4 @@
 ﻿using InventoryApp.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryApp.Server.Controllers

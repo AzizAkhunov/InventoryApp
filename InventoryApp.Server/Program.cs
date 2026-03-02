@@ -18,6 +18,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IInventoryAccessService, InventoryAccessService>();
 builder.Services.AddScoped<ICustomIdGenerator, CustomIdGenerator>();
+builder.Services.AddScoped<IDiscussionService,DiscussionService>();
 
 var app = builder.Build();
 

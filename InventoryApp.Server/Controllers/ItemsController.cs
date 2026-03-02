@@ -38,7 +38,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemDto>> Create([FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             try
             {
@@ -54,7 +54,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<ItemDto>> Update(Guid id, [FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             try
             {
@@ -78,7 +78,7 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             try
             {

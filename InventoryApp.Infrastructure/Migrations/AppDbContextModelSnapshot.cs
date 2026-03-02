@@ -35,9 +35,6 @@ namespace InventoryApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
@@ -49,25 +46,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 2, 27, 9, 23, 24, 824, DateTimeKind.Utc).AddTicks(7011),
+                            CreatedAt = new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7853),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 2, 27, 9, 23, 24, 824, DateTimeKind.Utc).AddTicks(7017),
+                            CreatedAt = new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7861),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 2, 27, 9, 23, 24, 824, DateTimeKind.Utc).AddTicks(7019),
+                            CreatedAt = new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7862),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 2, 27, 9, 23, 24, 824, DateTimeKind.Utc).AddTicks(7020),
+                            CreatedAt = new DateTime(2026, 3, 2, 17, 39, 11, 75, DateTimeKind.Utc).AddTicks(7863),
                             Name = "Other"
                         });
                 });
@@ -88,9 +85,6 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.Property<Guid>("InventoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
@@ -101,6 +95,34 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("InventoryApp.Domain.Entities.DiscussionPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("InventoryId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("InventoryId");
+
+                    b.ToTable("DiscussionPosts");
                 });
 
             modelBuilder.Entity("InventoryApp.Domain.Entities.Inventory", b =>
@@ -185,9 +207,6 @@ namespace InventoryApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("integer");
@@ -214,9 +233,6 @@ namespace InventoryApp.Infrastructure.Migrations
 
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("InventoryId", "UserId");
 
@@ -248,9 +264,6 @@ namespace InventoryApp.Infrastructure.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -339,9 +352,6 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.Property<string>("Text3")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("Version")
                         .IsConcurrencyToken()
                         .HasColumnType("integer");
@@ -367,9 +377,6 @@ namespace InventoryApp.Infrastructure.Migrations
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -397,9 +404,6 @@ namespace InventoryApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
@@ -426,9 +430,6 @@ namespace InventoryApp.Infrastructure.Migrations
 
                     b.Property<bool>("IsBlocked")
                         .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -470,6 +471,25 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("InventoryApp.Domain.Entities.DiscussionPost", b =>
+                {
+                    b.HasOne("InventoryApp.Domain.Entities.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InventoryApp.Domain.Entities.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Inventory");
                 });
 
             modelBuilder.Entity("InventoryApp.Domain.Entities.Inventory", b =>

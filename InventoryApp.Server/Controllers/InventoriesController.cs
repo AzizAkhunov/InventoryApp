@@ -39,7 +39,7 @@ namespace InventoryApp.Server.Controllers
         public async Task<ActionResult<InventoryDto>> Create([FromBody] InventoryDto dto)
         {
             // временно userId захардкожен
-            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             var result = await _inventoryService.CreateAsync(userId, dto);
 
@@ -49,7 +49,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<InventoryDto>> Update(Guid id, [FromBody] InventoryDto dto)
         {
-            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             try
             {
@@ -73,7 +73,7 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
             try
             {
