@@ -123,6 +123,31 @@ namespace InventoryApp.Application.Services
             };
 
             _context.Inventories.Add(inventory);
+            if (dto.Tags != null && dto.Tags.Any())
+            {
+                foreach (var tagName in dto.Tags.Select(t => t.Trim().ToLower()).Distinct())
+                {
+                    var tag = await _context.Tags
+                        .FirstOrDefaultAsync(t => t.Name == tagName);
+
+                    if (tag == null)
+                    {
+                        tag = new Tag
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = tagName
+                        };
+
+                        _context.Tags.Add(tag);
+                    }
+
+                    _context.InventoryTags.Add(new InventoryTag
+                    {
+                        InventoryId = inventory.Id,
+                        Tag = tag
+                    });
+                }
+            }
             await _context.SaveChangesAsync();
 
             dto.Id = inventory.Id;

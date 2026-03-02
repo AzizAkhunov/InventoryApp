@@ -42,5 +42,8 @@
 
         public bool CustomBool3Enabled { get; set; }
         public string? CustomBool3Name { get; set; }
+
+        //Tags
+        public List<string>? Tags { get; set; }
     }
 }

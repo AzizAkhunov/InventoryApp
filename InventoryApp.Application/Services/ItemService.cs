@@ -165,6 +165,7 @@ namespace InventoryApp.Application.Services
 
         public async Task<ItemDto?> UpdateAsync(Guid userId, Guid id, ItemDto dto)
         {
+            var user = await _context.Users.FirstAsync(u => u.Id == userId);
             var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == id);
 
             if (item == null)
@@ -176,8 +177,9 @@ namespace InventoryApp.Application.Services
 
             var hasAccess =
                 inventory.OwnerId == userId ||
-                inventory.IsPublic ||
-                inventory.AccessList.Any(a => a.UserId == userId);
+                inventory.AccessList.Any(a => a.UserId == userId) ||
+                user.IsAdmin ||
+                item.CreatedById == userId;
 
             if (!hasAccess)
                 throw new UnauthorizedAccessException();
@@ -202,10 +204,26 @@ namespace InventoryApp.Application.Services
 
         public async Task<bool> DeleteAsync(Guid userId, Guid id)
         {
-            var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == id);
+            var item = await _context.Items
+                .Include(i => i.Inventory)
+                .ThenInclude(inv => inv.AccessList)
+                .FirstOrDefaultAsync(i => i.Id == id);
 
             if (item == null)
                 return false;
+
+            var user = await _context.Users.FirstAsync(u => u.Id == userId);
+
+            var inventory = item.Inventory;
+
+            var hasAccess =
+                inventory.OwnerId == userId ||
+                inventory.AccessList.Any(a => a.UserId == userId) ||
+                user.IsAdmin ||
+                item.CreatedById == userId;
+
+            if (!hasAccess)
+                throw new UnauthorizedAccessException();
 
             _context.Items.Remove(item);
             await _context.SaveChangesAsync();

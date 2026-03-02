@@ -27,7 +27,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ItemDto>> GetById(Guid id)
         {
-            var result = await _itemService.GetByIdAsync(id);
+            var result = await _itemService.GetByIdAsync(id);   
 
             if (result == null)
                 return NotFound();
@@ -38,7 +38,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemDto>> Create([FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
 
             try
             {
@@ -54,7 +54,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<ItemDto>> Update(Guid id, [FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
 
             try
             {
@@ -65,6 +65,10 @@ namespace InventoryApp.Server.Controllers
 
                 return Ok(result);
             }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
             catch (DbUpdateConcurrencyException)
             {
                 return Conflict("The item was modified by another user.");
@@ -74,14 +78,21 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse("550e8400-e29b-41d4-a716-446655440000");
 
-            var result = await _itemService.DeleteAsync(userId, id);
+            try
+            {
+                var result = await _itemService.DeleteAsync(userId, id);
 
-            if (!result)
-                return NotFound();
+                if (!result)
+                    return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
     }
 }
