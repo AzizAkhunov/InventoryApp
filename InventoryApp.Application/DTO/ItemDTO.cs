@@ -6,7 +6,7 @@
 
         public Guid InventoryId { get; set; }
 
-        public string CustomId { get; set; } = null!;
+        public string? CustomId { get; set; }
 
         public int Version { get; set; }
 

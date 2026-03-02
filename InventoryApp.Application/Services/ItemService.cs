@@ -3,16 +3,18 @@ using InventoryApp.Application.Interfaces;
 using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace InventoryApp.Application.Services
 {
     public class ItemService : IItemService
     {
         private readonly AppDbContext _context;
-
-        public ItemService(AppDbContext context)
+        private readonly ICustomIdGenerator _idGenerator;
+        public ItemService(AppDbContext context, ICustomIdGenerator idGenerator)
         {
             _context = context;
+            _idGenerator = idGenerator;
         }
 
         public async Task<List<ItemDto>> GetByInventoryAsync(Guid inventoryId)
@@ -106,7 +108,7 @@ namespace InventoryApp.Application.Services
                 Id = Guid.NewGuid(),
                 InventoryId = dto.InventoryId,
                 CreatedById = userId,
-                CustomId = dto.CustomId,
+                CustomId = await _idGenerator.GenerateAsync(dto.InventoryId),
                 Version = 1,
 
                 Text1 = dto.Text1,
@@ -130,8 +132,27 @@ namespace InventoryApp.Application.Services
                 Doc3 = dto.Doc3
             };
 
-            _context.Items.Add(item);
-            await _context.SaveChangesAsync();
+            const int maxRetries = 3;
+            int attempt = 0;
+
+            while (attempt < maxRetries)
+            {
+                try
+                {
+                    _context.Items.Add(item);
+                    await _context.SaveChangesAsync();
+                    break;
+                }
+                catch (DbUpdateException)
+                {
+                    attempt++;
+
+                    if (attempt >= maxRetries)
+                        throw;
+
+                    item.CustomId = await _idGenerator.GenerateAsync(dto.InventoryId);
+                }
+            }
 
             dto.Id = item.Id;
             dto.Version = item.Version;

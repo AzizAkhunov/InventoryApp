@@ -9,6 +9,6 @@
         Random9Digit = 4,
         Guid = 5,
         DateTime = 6,
-        Sequence = 7
+        Sequence = 7    
     }
 }
