@@ -139,7 +139,12 @@ namespace InventoryApp.Application.Services
             if (inventory == null)
                 return null;
 
-            if (inventory.OwnerId != userId)
+            var user = await _context.Users.FirstAsync(u => u.Id == userId);
+
+            var isOwner = inventory.OwnerId == userId;
+            var isAdmin = user.IsAdmin;
+
+            if (!isOwner && !isAdmin)
                 throw new UnauthorizedAccessException();
 
             inventory.Title = dto.Title;
@@ -173,7 +178,12 @@ namespace InventoryApp.Application.Services
             if (inventory == null)
                 return false;
 
-            if (inventory.OwnerId != userId)
+            var user = await _context.Users.FirstAsync(u => u.Id == userId);
+
+            var isOwner = inventory.OwnerId == userId;
+            var isAdmin = user.IsAdmin;
+
+            if (!isOwner && !isAdmin)
                 throw new UnauthorizedAccessException();
 
             _context.Inventories.Remove(inventory);

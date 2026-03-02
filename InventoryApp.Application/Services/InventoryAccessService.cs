@@ -37,7 +37,9 @@ namespace InventoryApp.Application.Services
             if (inventory == null)
                 throw new Exception("Inventory not found");
 
-            if (inventory.OwnerId != ownerId)
+            var user = await _context.Users.FirstAsync(u => u.Id == ownerId);
+
+            if (inventory.OwnerId != ownerId && !user.IsAdmin)
                 throw new UnauthorizedAccessException();
 
             var exists = await _context.InventoryAccesses
@@ -64,7 +66,9 @@ namespace InventoryApp.Application.Services
             if (inventory == null)
                 throw new Exception("Inventory not found");
 
-            if (inventory.OwnerId != ownerId)
+            var user = await _context.Users.FirstAsync(u => u.Id == ownerId);
+
+            if (inventory.OwnerId != ownerId && !user.IsAdmin)
                 throw new UnauthorizedAccessException();
 
             var access = await _context.InventoryAccesses

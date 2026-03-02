@@ -95,10 +95,13 @@ namespace InventoryApp.Application.Services
                 throw new Exception("Inventory not found");
 
             // Verifying access rights: owner, public, or in access list
+            var user = await _context.Users.FirstAsync(u => u.Id == userId);
+
             var hasAccess =
                 inventory.OwnerId == userId ||
                 inventory.IsPublic ||
-                inventory.AccessList.Any(a => a.UserId == userId);
+                inventory.AccessList.Any(a => a.UserId == userId) ||
+                user.IsAdmin;
 
             if (!hasAccess)
                 throw new UnauthorizedAccessException();

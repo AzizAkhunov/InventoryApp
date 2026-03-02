@@ -59,6 +59,48 @@ namespace InventoryApp.Application.Services
 
                     case IdElementType.Sequence:
 
+                        int sequenceLength = element.Padding ?? 1;
+
+                        int prefixLength = 0;
+
+                        foreach (var prev in elements.Where(e => e.Order < element.Order))
+                        {
+                            switch (prev.Type)
+                            {
+                                case IdElementType.FixedText:
+                                    prefixLength += prev.FixedText?.Length ?? 0;
+                                    break;
+
+                                case IdElementType.Random20Bit:
+                                    prefixLength += 7; // max length
+                                    break;
+
+                                case IdElementType.Random32Bit:
+                                    prefixLength += 10; // max length
+                                    break;
+
+                                case IdElementType.Random6Digit:
+                                    prefixLength += 6;
+                                    break;
+
+                                case IdElementType.Random9Digit:
+                                    prefixLength += 9;
+                                    break;
+
+                                case IdElementType.Guid:
+                                    prefixLength += 32;
+                                    break;
+
+                                case IdElementType.DateTime:
+                                    prefixLength += 14; // yyyyMMddHHmmss
+                                    break;
+
+                                case IdElementType.Sequence:
+                                    prefixLength += prev.Padding ?? 1;
+                                    break;
+                            }
+                        }
+
                         var existingIds = await _context.Items
                             .Where(i => i.InventoryId == inventoryId)
                             .Select(i => i.CustomId)
@@ -68,19 +110,21 @@ namespace InventoryApp.Application.Services
 
                         foreach (var id in existingIds)
                         {
-                            if (int.TryParse(id, out int number))
+                            if (id.Length >= prefixLength + sequenceLength)
                             {
-                                if (number > maxSequence)
-                                    maxSequence = number;
+                                var seqPart = id.Substring(prefixLength, sequenceLength);
+
+                                if (int.TryParse(seqPart, out int number))
+                                {
+                                    if (number > maxSequence)
+                                        maxSequence = number;
+                                }
                             }
                         }
 
                         var next = maxSequence + 1;
 
-                        if (element.Padding.HasValue)
-                            sb.Append(next.ToString().PadLeft(element.Padding.Value, '0'));
-                        else
-                            sb.Append(next);
+                        sb.Append(next.ToString().PadLeft(sequenceLength, '0'));
 
                         break;
                 }
