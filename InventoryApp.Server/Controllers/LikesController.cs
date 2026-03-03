@@ -1,6 +1,8 @@
 ﻿using InventoryApp.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace InventoryApp.Server.Controllers
 {
@@ -15,10 +17,11 @@ namespace InventoryApp.Server.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpPost("{itemId:guid}")]
         public async Task<IActionResult> Toggle(Guid itemId)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             var count = await _service.ToggleLikeAsync(userId, itemId);
 

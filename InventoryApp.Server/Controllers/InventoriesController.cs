@@ -1,8 +1,10 @@
 ﻿using InventoryApp.Application.DTO;
 using InventoryApp.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace InventoryApp.Server.Controllers
 {
@@ -35,21 +37,21 @@ namespace InventoryApp.Server.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<InventoryDto>> Create([FromBody] InventoryDto dto)
         {
-            // временно userId захардкожен
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             var result = await _inventoryService.CreateAsync(userId, dto);
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
-
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<InventoryDto>> Update(Guid id, [FromBody] InventoryDto dto)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
@@ -70,10 +72,11 @@ namespace InventoryApp.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {

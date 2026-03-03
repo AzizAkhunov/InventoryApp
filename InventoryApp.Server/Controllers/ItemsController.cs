@@ -1,8 +1,10 @@
 ﻿using InventoryApp.Application.DTO;
 using InventoryApp.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace InventoryApp.Server.Controllers
 {
@@ -35,10 +37,11 @@ namespace InventoryApp.Server.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ItemDto>> Create([FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
@@ -51,10 +54,11 @@ namespace InventoryApp.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<ItemDto>> Update(Guid id, [FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
@@ -75,10 +79,11 @@ namespace InventoryApp.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {

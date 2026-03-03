@@ -1,5 +1,7 @@
 ﻿using InventoryApp.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace InventoryApp.Server.Controllers
 {
@@ -20,11 +22,11 @@ namespace InventoryApp.Server.Controllers
             var result = await _service.GetPostsAsync(inventoryId);
             return Ok(result);
         }
-
+        [Authorize]
         [HttpPost("{inventoryId:guid}")]
         public async Task<IActionResult> Post(Guid inventoryId, [FromBody] string content)
         {
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             var result = await _service.AddPostAsync(userId, inventoryId, content);
             return Ok(result);

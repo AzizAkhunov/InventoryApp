@@ -1,5 +1,7 @@
 ﻿using InventoryApp.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace InventoryApp.Server.Controllers
 {
@@ -20,11 +22,11 @@ namespace InventoryApp.Server.Controllers
             var result = await _service.GetAccessListAsync(inventoryId);
             return Ok(result);
         }
-
+        [Authorize]
         [HttpPost("{userId:guid}")]
         public async Task<IActionResult> AddAccess(Guid inventoryId, Guid userId)
         {
-            var ownerId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var ownerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
@@ -37,10 +39,11 @@ namespace InventoryApp.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{userId:guid}")]
         public async Task<IActionResult> RemoveAccess(Guid inventoryId, Guid userId)
         {
-            var ownerId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var ownerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
