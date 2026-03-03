@@ -190,6 +190,22 @@ namespace InventoryApp.Infrastructure.Data
                 .HasForeignKey(p => p.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            //ITEMLIKE 
+            modelBuilder.Entity<ItemLike>()
+                .HasKey(l => new { l.ItemId, l.UserId });
+
+            modelBuilder.Entity<ItemLike>()
+                .HasOne(l => l.Item)
+                .WithMany()
+                .HasForeignKey(l => l.ItemId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ItemLike>()
+                .HasOne(l => l.User)
+                .WithMany()
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
