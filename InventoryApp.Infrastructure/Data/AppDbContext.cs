@@ -18,6 +18,7 @@ namespace InventoryApp.Infrastructure.Data
         public DbSet<DiscussionPost> DiscussionPosts => Set<DiscussionPost>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<InventoryIdElement> InventoryIdElements => Set<InventoryIdElement>();
+        public DbSet<ItemLike> ItemLikes => Set<ItemLike>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
