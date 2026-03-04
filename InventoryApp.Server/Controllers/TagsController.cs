@@ -1,4 +1,5 @@
-﻿using InventoryApp.Infrastructure.Data;
+﻿using InventoryApp.Application.Interfaces;
+using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,22 +9,25 @@ namespace InventoryApp.Server.Controllers
     [ApiController]
     public class TagsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ITagService _tagService;
 
-        public TagsController(AppDbContext context)
+        public TagsController(ITagService tagService)
         {
-            _context = context;
+            _tagService = tagService;
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string query)
         {
-            var tags = await _context.Tags
-                .Where(t => t.Name.StartsWith(query.ToLower()))
-                .OrderBy(t => t.Name)
-                .Take(10)
-                .Select(t => t.Name)
-                .ToListAsync();
+            var tags = await _tagService.SearchAsync(query);
+
+            return Ok(tags);
+        }
+
+        [HttpGet("autocomplete")]
+        public async Task<IActionResult> Autocomplete([FromQuery] string query)
+        {
+            var tags = await _tagService.AutocompleteAsync(query);
 
             return Ok(tags);
         }
@@ -31,16 +35,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("cloud")]
         public async Task<IActionResult> GetCloud()
         {
-            var cloud = await _context.InventoryTags
-                .GroupBy(it => it.Tag.Name)
-                .Select(g => new
-                {
-                    Tag = g.Key,
-                    Count = g.Count()
-                })
-                .OrderByDescending(x => x.Count)
-                .Take(20)
-                .ToListAsync();
+            var cloud = await _tagService.GetCloudAsync();
 
             return Ok(cloud);
         }
