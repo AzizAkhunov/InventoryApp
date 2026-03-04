@@ -216,5 +216,45 @@ namespace InventoryApp.Application.Services
 
             return true;
         }
+
+        public async Task<InventoryStatisticsDto> GetStatisticsAsync(Guid inventoryId)
+        {
+            var items = await _context.Items
+                .Where(i => i.InventoryId == inventoryId)
+                .ToListAsync();
+
+            var result = new InventoryStatisticsDto
+            {
+                ItemsCount = items.Count
+            };
+
+            if (items.Count == 0)
+                return result;
+
+            result.NumberStats.Add(new NumberFieldStatsDto
+            {
+                Field = "Number1",
+                Avg = items.Where(i => i.Number1 != null).Average(i => (double?)i.Number1),
+                Min = items.Where(i => i.Number1 != null).Min(i => (double?)i.Number1),
+                Max = items.Where(i => i.Number1 != null).Max(i => (double?)i.Number1)
+            });
+
+            var topText = items
+                .Where(i => i.Text1 != null)
+                .GroupBy(i => i.Text1)
+                .Select(g => new StringFieldStatsDto
+                {
+                    Field = "Text1",
+                    Value = g.Key!,
+                    Count = g.Count()
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToList();
+
+            result.TopStrings.AddRange(topText);
+
+            return result;
+        }
     }
 }

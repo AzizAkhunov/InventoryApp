@@ -92,5 +92,13 @@ namespace InventoryApp.Server.Controllers
                 return Forbid();
             }
         }
+
+        [HttpGet("{id:guid}/statistics")]
+        public async Task<ActionResult<InventoryStatisticsDto>> GetStatistics(Guid id)
+        {
+            var result = await _inventoryService.GetStatisticsAsync(id);
+
+            return Ok(result);
+        }
     }
 }

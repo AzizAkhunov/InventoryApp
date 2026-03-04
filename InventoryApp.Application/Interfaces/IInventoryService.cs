@@ -13,5 +13,6 @@ namespace InventoryApp.Application.Interfaces
         Task<InventoryDto?> UpdateAsync(Guid userId, Guid id, InventoryDto dto);
 
         Task<bool> DeleteAsync(Guid userId, Guid id);
+        Task<InventoryStatisticsDto> GetStatisticsAsync(Guid inventoryId);
     }
 }
