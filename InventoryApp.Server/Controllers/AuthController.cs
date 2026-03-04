@@ -1,32 +1,91 @@
-﻿using InventoryApp.Application.Interfaces;
+﻿using Google.Apis.Auth;
+using InventoryApp.Application.DTO;
+using InventoryApp.Application.Interfaces;
+using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryApp.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IJwtService _jwt;
+        private readonly IJwtService _jwtService;
+        private readonly IConfiguration _config;
 
-        public AuthController(AppDbContext context, IJwtService jwt)
+        public AuthController(
+            AppDbContext context,
+            IJwtService jwtService,
+            IConfiguration config)
         {
             _context = context;
-            _jwt = jwt;
+            _jwtService = jwtService;
+            _config = config;
         }
 
-        [HttpPost("login/{userId:guid}")]
-        public async Task<IActionResult> Login(Guid userId)
+        [HttpPost("google")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginDto dto)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
+            if (string.IsNullOrWhiteSpace(dto.IdToken))
+                return BadRequest("IdToken is required.");
 
-            var token = _jwt.GenerateToken(user);
+            GoogleJsonWebSignature.Payload payload;
 
-            return Ok(new { Token = token });
+            try
+            {
+                var clientId = _config["GoogleAuth:ClientId"];
+
+                payload = await GoogleJsonWebSignature.ValidateAsync(
+                    dto.IdToken,
+                    new GoogleJsonWebSignature.ValidationSettings
+                    {
+                        Audience = new[] { clientId }
+                    });
+            }
+            catch
+            {
+                return Unauthorized("Invalid Google token.");
+            }
+
+            var email = payload.Email;
+            var name = payload.Name;
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Email = email,
+                    UserName = name,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            if (user.IsBlocked)
+                return Forbid();
+
+            var jwt = _jwtService.GenerateToken(user);
+
+            return Ok(new
+            {
+                token = jwt,
+                user = new
+                {
+                    id = user.Id,
+                    name = user.UserName,
+                    email = user.Email,
+                    isAdmin = user.IsAdmin
+                }
+            });
         }
     }
 }
