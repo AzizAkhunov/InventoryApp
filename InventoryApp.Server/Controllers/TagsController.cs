@@ -1,7 +1,5 @@
 ﻿using InventoryApp.Application.Interfaces;
-using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace InventoryApp.Server.Controllers
 {

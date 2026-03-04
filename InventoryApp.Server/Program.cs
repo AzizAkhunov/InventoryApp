@@ -10,8 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection") ??
+    Environment.GetEnvironmentVariable("DATABASE_URL");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -62,6 +66,7 @@ builder.Services.AddScoped<IDiscussionService,DiscussionService>();
 builder.Services.AddScoped<ILikeService,LikeService>();
 builder.Services.AddScoped<IJwtService,JwtService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 
 
