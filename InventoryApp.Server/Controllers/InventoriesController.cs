@@ -37,7 +37,7 @@ namespace InventoryApp.Server.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<ActionResult<InventoryDto>> Create([FromBody] InventoryDto dto)
         {
