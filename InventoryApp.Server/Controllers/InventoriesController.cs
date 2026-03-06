@@ -41,8 +41,8 @@ namespace InventoryApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<InventoryDto>> Create([FromBody] InventoryDto dto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
+            //var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
             var result = await _inventoryService.CreateAsync(userId, dto);
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
