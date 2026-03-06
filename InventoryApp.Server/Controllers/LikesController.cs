@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace InventoryApp.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LikesController : ControllerBase
     {
