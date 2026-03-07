@@ -72,11 +72,11 @@ namespace InventoryApp.Application.Services
                                     break;
 
                                 case IdElementType.Random20Bit:
-                                    prefixLength += 7; // max length
+                                    prefixLength += 7;
                                     break;
 
                                 case IdElementType.Random32Bit:
-                                    prefixLength += 10; // max length
+                                    prefixLength += 10;
                                     break;
 
                                 case IdElementType.Random6Digit:
@@ -92,7 +92,7 @@ namespace InventoryApp.Application.Services
                                     break;
 
                                 case IdElementType.DateTime:
-                                    prefixLength += 14; // yyyyMMddHHmmss
+                                    prefixLength += 14;
                                     break;
 
                                 case IdElementType.Sequence:
@@ -101,28 +101,21 @@ namespace InventoryApp.Application.Services
                             }
                         }
 
-                        var existingIds = await _context.Items
+                        var lastId = await _context.Items
                             .Where(i => i.InventoryId == inventoryId)
+                            .OrderByDescending(i => i.CustomId)
                             .Select(i => i.CustomId)
-                            .ToListAsync();
+                            .FirstOrDefaultAsync();
 
-                        int maxSequence = 0;
+                        int next = 1;
 
-                        foreach (var id in existingIds)
+                        if (lastId != null && lastId.Length >= prefixLength + sequenceLength)
                         {
-                            if (id.Length >= prefixLength + sequenceLength)
-                            {
-                                var seqPart = id.Substring(prefixLength, sequenceLength);
+                            var seqPart = lastId.Substring(prefixLength, sequenceLength);
 
-                                if (int.TryParse(seqPart, out int number))
-                                {
-                                    if (number > maxSequence)
-                                        maxSequence = number;
-                                }
-                            }
+                            if (int.TryParse(seqPart, out int parsed))
+                                next = parsed + 1;
                         }
-
-                        var next = maxSequence + 1;
 
                         sb.Append(next.ToString().PadLeft(sequenceLength, '0'));
 
