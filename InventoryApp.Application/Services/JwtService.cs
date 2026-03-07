@@ -9,7 +9,7 @@ namespace InventoryApp.Application.Services
 {
     public class JwtService : IJwtService
     {
-        private readonly string _key = "SUPER_SECRET_KEY_123456";
+        private readonly string _key = "THIS_IS_MY_SUPER_SECRET_KEY_FOR_JWT_AUTH_123456";
 
         public string GenerateToken(User user)
         {
