@@ -1,4 +1,6 @@
-﻿namespace InventoryApp.Application.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InventoryApp.Application.DTO
 {
     public class CreateItemDto
     {
@@ -14,6 +16,7 @@
         public string? MultiText2 { get; set; }
         public string? MultiText3 { get; set; }
 
+        [Range(0,int.MaxValue)]
         public decimal? Number1 { get; set; }
         public decimal? Number2 { get; set; }
         public decimal? Number3 { get; set; }
