@@ -128,7 +128,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("frontend", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -155,21 +155,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.Use(async (context, next) =>
-{
-    if (context.Request.Method == "OPTIONS")
-    {
-        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-        context.Response.Headers.Add("Access-Control-Allow-Methods", "*");
-        context.Response.StatusCode = 200;
-        return;
-    }
-
-    await next();
-});
-
 
 
 app.UseCors("frontend");
