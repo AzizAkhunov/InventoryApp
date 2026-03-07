@@ -94,7 +94,6 @@ namespace InventoryApp.Application.Services
             if (inventory == null)
                 throw new Exception("Inventory not found");
 
-            // Verifying access rights: owner, public, or in access list
             var user = await _context.Users.FirstAsync(u => u.Id == userId);
 
             var hasAccess =
@@ -106,44 +105,47 @@ namespace InventoryApp.Application.Services
             if (!hasAccess)
                 throw new UnauthorizedAccessException();
 
-            var item = new Item
-            {
-                Id = Guid.NewGuid(),
-                InventoryId = dto.InventoryId,
-                CreatedById = userId,
-                CustomId = await _idGenerator.GenerateAsync(dto.InventoryId),
-                Version = 1,
-
-                Text1 = dto.Text1,
-                Text2 = dto.Text2,
-                Text3 = dto.Text3,
-
-                MultiText1 = dto.MultiText1,
-                MultiText2 = dto.MultiText2,
-                MultiText3 = dto.MultiText3,
-
-                Number1 = dto.Number1,
-                Number2 = dto.Number2,
-                Number3 = dto.Number3,
-
-                Bool1 = dto.Bool1,
-                Bool2 = dto.Bool2,
-                Bool3 = dto.Bool3,
-
-                Doc1 = dto.Doc1,
-                Doc2 = dto.Doc2,
-                Doc3 = dto.Doc3
-            };
-
             const int maxRetries = 3;
             int attempt = 0;
+
+            Item item = null!;
 
             while (attempt < maxRetries)
             {
                 try
                 {
+                    item = new Item
+                    {
+                        Id = Guid.NewGuid(),
+                        InventoryId = dto.InventoryId,
+                        CreatedById = userId,
+                        CustomId = await _idGenerator.GenerateAsync(dto.InventoryId),
+                        Version = 1,
+
+                        Text1 = dto.Text1,
+                        Text2 = dto.Text2,
+                        Text3 = dto.Text3,
+
+                        MultiText1 = dto.MultiText1,
+                        MultiText2 = dto.MultiText2,
+                        MultiText3 = dto.MultiText3,
+
+                        Number1 = dto.Number1,
+                        Number2 = dto.Number2,
+                        Number3 = dto.Number3,
+
+                        Bool1 = dto.Bool1,
+                        Bool2 = dto.Bool2,
+                        Bool3 = dto.Bool3,
+
+                        Doc1 = dto.Doc1,
+                        Doc2 = dto.Doc2,
+                        Doc3 = dto.Doc3
+                    };
+
                     _context.Items.Add(item);
                     await _context.SaveChangesAsync();
+
                     break;
                 }
                 catch (DbUpdateException)
@@ -153,7 +155,7 @@ namespace InventoryApp.Application.Services
                     if (attempt >= maxRetries)
                         throw;
 
-                    item.CustomId = await _idGenerator.GenerateAsync(dto.InventoryId);
+                    _context.ChangeTracker.Clear();
                 }
             }
 
@@ -175,6 +177,9 @@ namespace InventoryApp.Application.Services
                 .Include(i => i.AccessList)
                 .FirstOrDefaultAsync(i => i.Id == item.InventoryId);
 
+            if (inventory == null)
+                throw new Exception("Inventory not found");
+
             var hasAccess =
                 inventory.OwnerId == userId ||
                 inventory.AccessList.Any(a => a.UserId == userId) ||
@@ -184,7 +189,6 @@ namespace InventoryApp.Application.Services
             if (!hasAccess)
                 throw new UnauthorizedAccessException();
 
-            item.CustomId = dto.CustomId;
             item.Text1 = dto.Text1;
             item.Number1 = dto.Number1;
             item.Version = dto.Version;
