@@ -39,7 +39,7 @@ namespace InventoryApp.Server.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ItemDto>> Create([FromBody] ItemDto dto)
+        public async Task<ActionResult<ItemDto>> Create([FromBody] CreateItemDto dto)
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
