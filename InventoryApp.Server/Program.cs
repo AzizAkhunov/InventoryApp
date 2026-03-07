@@ -174,7 +174,6 @@ app.Use(async (context, next) =>
 
 app.UseCors("frontend");
 
-app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
