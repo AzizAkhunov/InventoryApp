@@ -22,6 +22,22 @@ namespace InventoryApp.Application.Services
                 .OrderBy(e => e.Order)
                 .ToListAsync();
 
+            if (!elements.Any())
+            {
+                var lastId = await _context.Items
+                    .Where(i => i.InventoryId == inventoryId)
+                    .OrderByDescending(i => i.CustomId)
+                    .Select(i => i.CustomId)
+                    .FirstOrDefaultAsync();
+
+                int next = 1;
+
+                if (lastId != null && int.TryParse(lastId, out int parsed))
+                    next = parsed + 1;
+
+                return next.ToString("D5");
+            }
+
             var sb = new StringBuilder();
 
             foreach (var element in elements)
