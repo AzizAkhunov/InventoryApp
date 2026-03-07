@@ -156,11 +156,9 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-
+app.UseCors("frontend");
 
 app.UseHttpsRedirection();
-
-app.UseCors("frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
