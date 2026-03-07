@@ -8,7 +8,7 @@ namespace InventoryApp.Application.Interfaces
 
         Task<ItemDto?> GetByIdAsync(Guid id);
 
-        Task<ItemDto> CreateAsync(Guid userId, ItemDto dto);
+        Task<ItemDto> CreateAsync(Guid userId, CreateItemDto dto);
 
         Task<ItemDto?> UpdateAsync(Guid userId, Guid id, ItemDto dto);
 

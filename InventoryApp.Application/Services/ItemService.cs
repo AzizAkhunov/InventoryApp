@@ -85,7 +85,7 @@ namespace InventoryApp.Application.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ItemDto> CreateAsync(Guid userId, ItemDto dto)
+        public async Task<ItemDto> CreateAsync(Guid userId, CreateItemDto dto)
         {
             var inventory = await _context.Inventories
                 .Include(i => i.AccessList)
@@ -159,10 +159,33 @@ namespace InventoryApp.Application.Services
                 }
             }
 
-            dto.Id = item.Id;
-            dto.Version = item.Version;
+            return new ItemDto
+            {
+                Id = item.Id,
+                InventoryId = item.InventoryId,
+                CustomId = item.CustomId,
+                Version = item.Version,
 
-            return dto;
+                Text1 = item.Text1,
+                Text2 = item.Text2,
+                Text3 = item.Text3,
+
+                MultiText1 = item.MultiText1,
+                MultiText2 = item.MultiText2,
+                MultiText3 = item.MultiText3,
+
+                Number1 = item.Number1,
+                Number2 = item.Number2,
+                Number3 = item.Number3,
+
+                Bool1 = item.Bool1,
+                Bool2 = item.Bool2,
+                Bool3 = item.Bool3,
+
+                Doc1 = item.Doc1,
+                Doc2 = item.Doc2,
+                Doc3 = item.Doc3
+            };
         }
 
         public async Task<ItemDto?> UpdateAsync(Guid userId, Guid id, ItemDto dto)
