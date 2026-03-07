@@ -108,22 +108,31 @@ builder.Services.AddAuthorization();
 
 
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("frontend",
+//        policy =>
+//        {
+//            policy.WithOrigins(
+//                "http://localhost:5173",
+//                "https://inventoryapp-front.onrender.com"
+//            )
+//            .AllowAnyHeader()
+//            .AllowAnyMethod();
+//        });
+//});
+
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("frontend",
-        policy =>
-        {
-            policy.WithOrigins(
-                "http://localhost:5173",
-                "https://inventoryapp-front.onrender.com"
-            )
+    options.AddPolicy("frontend", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
-        });
+    });
 });
-
-
-
 
 
 
