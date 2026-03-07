@@ -100,7 +100,7 @@ builder.Services.AddAuthentication("Bearer")
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("SUPER_SECRET_KEY_123456"))
+                Encoding.UTF8.GetBytes("THIS_IS_MY_SUPER_SECRET_KEY_FOR_JWT_AUTH_123456"))
         };
     });
 
