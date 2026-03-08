@@ -37,12 +37,12 @@ namespace InventoryApp.Server.Controllers
             return Ok(result);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ItemDto>> Create([FromBody] CreateItemDto dto)
         {
-            //var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"); // For testing without authentication, replace with actual user ID when auth is implemented.
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            //var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"); // For testing without authentication, replace with actual user ID when auth is implemented.
 
             try
             {
@@ -60,7 +60,7 @@ namespace InventoryApp.Server.Controllers
         public async Task<ActionResult<ItemDto>> Update(Guid id, [FromBody] ItemDto dto)
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
+            
             try
             {
                 var result = await _itemService.UpdateAsync(userId, id, dto);
