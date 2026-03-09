@@ -1,6 +1,7 @@
 using InventoryApp.Application.Interfaces;
 using InventoryApp.Application.Services;
 using InventoryApp.Infrastructure.Data;
+using InventoryApp.Server.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -88,7 +89,7 @@ builder.Services.AddScoped<IJwtService,JwtService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ITagService, TagService>();
 
-
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -150,7 +151,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Migration error: " + ex.Message);
     }
 }
-
+app.MapHub<DiscussionHub>("/hubs/discussion");
 
 
 app.UseSwagger();

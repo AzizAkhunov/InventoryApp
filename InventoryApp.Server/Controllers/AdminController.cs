@@ -1,4 +1,6 @@
-﻿using InventoryApp.Infrastructure.Data;
+﻿using InventoryApp.Domain.Entities;
+using InventoryApp.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +34,7 @@ namespace InventoryApp.Server.Controllers
 
             return Ok(users);
         }
-
+        [Authorize]
         [HttpPost("block/{userId:guid}")]
         public async Task<IActionResult> Block(Guid userId)
         {
@@ -44,7 +46,7 @@ namespace InventoryApp.Server.Controllers
 
             return Ok();
         }
-
+        [Authorize]
         [HttpPost("unblock/{userId:guid}")]
         public async Task<IActionResult> Unblock(Guid userId)
         {
@@ -57,6 +59,7 @@ namespace InventoryApp.Server.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("make-admin/{userId:guid}")]
         public async Task<IActionResult> MakeAdmin(Guid userId)
         {
@@ -68,7 +71,7 @@ namespace InventoryApp.Server.Controllers
 
             return Ok();
         }
-
+        [Authorize]
         [HttpPost("remove-admin/{userId:guid}")]
         public async Task<IActionResult> RemoveAdmin(Guid userId)
         {
