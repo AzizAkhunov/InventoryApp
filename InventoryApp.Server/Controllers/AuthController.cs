@@ -52,6 +52,7 @@ namespace InventoryApp.Server.Controllers
 
             var email = payload.Email;
             var name = payload.Name;
+            var picture = payload.Picture;
 
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
@@ -81,9 +82,12 @@ namespace InventoryApp.Server.Controllers
                 user = new
                 {
                     id = user.Id,
-                    name = user.UserName,
+                    userName = user.UserName,
                     email = user.Email,
-                    isAdmin = user.IsAdmin
+                    picture = picture,
+                    isAdmin = user.IsAdmin,
+                    isBlocked = user.IsBlocked,
+                    createdAt = user.CreatedAt
                 }
             });
         }
