@@ -1,5 +1,6 @@
 ﻿using InventoryApp.Application.DTO;
 using InventoryApp.Application.Interfaces;
+using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,34 @@ namespace InventoryApp.Server.Controllers
     public class InventoriesController : ControllerBase
     {
         private readonly IInventoryService _inventoryService;
-
-        public InventoriesController(IInventoryService inventoryService)
+        private readonly AppDbContext _context;
+        public InventoriesController(IInventoryService inventoryService,AppDbContext context)
         {
             _inventoryService = inventoryService;
+            _context = context;
+        }
+
+
+
+        [Authorize]
+        [HttpGet("my")]
+        public async Task<IActionResult> GetMyInventories()
+        {
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var inventories = await _context.Inventories
+                .Where(i => i.OwnerId == userId)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Title,
+                    i.Description,
+                    i.ImageUrl,
+                    i.IsPublic
+                })
+                .ToListAsync();
+
+            return Ok(inventories);
         }
 
         [HttpGet]
@@ -37,12 +62,11 @@ namespace InventoryApp.Server.Controllers
             return Ok(result);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<InventoryDto>> Create([FromBody] InventoryDto dto)
         {
-            //var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var userId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var result = await _inventoryService.CreateAsync(userId, dto);
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
