@@ -27,6 +27,7 @@ namespace InventoryApp.Application.Services
                     CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
+                    ImageUrl = i.ImageUrl,
 
                     CustomString1Enabled = i.CustomString1Enabled,
                     CustomString1Name = i.CustomString1Name,
@@ -65,6 +66,7 @@ namespace InventoryApp.Application.Services
                     CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
+                    ImageUrl = i.ImageUrl,
 
                     CustomString1Enabled = i.CustomString1Enabled,
                     CustomString1Name = i.CustomString1Name,
@@ -192,6 +194,7 @@ namespace InventoryApp.Application.Services
             inventory.Description = dto.Description;
             inventory.CategoryId = category.Id;
             inventory.IsPublic = dto.IsPublic;
+            inventory.ImageUrl = dto.ImageUrl;
 
             inventory.CustomString1Enabled = dto.CustomString1Enabled;
             inventory.CustomString1Name = dto.CustomString1Name;

@@ -10,6 +10,7 @@
         public string CategoryName { get; set; }
 
         public bool IsPublic { get; set; }
+        public string? ImageUrl { get; set; }
 
         public int Version { get; set; }
 
