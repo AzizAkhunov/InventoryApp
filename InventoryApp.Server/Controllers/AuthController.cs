@@ -53,7 +53,7 @@ namespace InventoryApp.Server.Controllers
             }
 
             var email = payload.Email;
-            var name = payload.Name;
+            var googleName = payload.Name;
             var picture = payload.Picture;
 
             var user = await _context.Users
@@ -65,7 +65,7 @@ namespace InventoryApp.Server.Controllers
                 {
                     Id = Guid.NewGuid(),
                     Email = email,
-                    UserName = name,
+                    UserName = googleName,
                     CreatedAt = DateTime.UtcNow
                 };
 
