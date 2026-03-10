@@ -44,6 +44,28 @@ namespace InventoryApp.Server.Controllers
             return Ok(inventories);
         }
 
+        [Authorize]
+        [HttpGet("shared")]
+        public async Task<IActionResult> GetSharedInventories()
+        {
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var inventories = await _context.InventoryAccesses
+                .Where(a => a.UserId == userId)
+                .Select(a => new
+                {
+                    a.Inventory.Id,
+                    a.Inventory.Title,
+                    a.Inventory.Description,
+                    a.Inventory.ImageUrl,
+                    a.Inventory.IsPublic
+                })
+                .ToListAsync();
+
+            return Ok(inventories);
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<List<InventoryDto>>> GetAll()
         {
