@@ -18,12 +18,13 @@ namespace InventoryApp.Application.Services
         public async Task<List<InventoryDto>> GetAllAsync()
         {
             return await _context.Inventories
+                .Include(i => i.Category)
                 .Select(i => new InventoryDto
                 {
                     Id = i.Id,
                     Title = i.Title,
                     Description = i.Description,
-                    CategoryId = i.CategoryId,
+                    CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
 
@@ -54,13 +55,14 @@ namespace InventoryApp.Application.Services
         public async Task<InventoryDto?> GetByIdAsync(Guid id)
         {
             return await _context.Inventories
+                .Include(i => i.Category)
                 .Where(i => i.Id == id)
                 .Select(i => new InventoryDto
                 {
                     Id = i.Id,
                     Title = i.Title,
                     Description = i.Description,
-                    CategoryId = i.CategoryId,
+                    CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
 
@@ -90,12 +92,18 @@ namespace InventoryApp.Application.Services
 
         public async Task<InventoryDto> CreateAsync(Guid userId, InventoryDto dto)
         {
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(c => c.Name == dto.CategoryName);
+
+            if (category == null)
+                throw new Exception("Category not found");
+
             var inventory = new Inventory
             {
                 Id = Guid.NewGuid(),
                 Title = dto.Title,
                 Description = dto.Description,
-                CategoryId = dto.CategoryId,
+                CategoryId = category.Id,
                 OwnerId = userId,
                 IsPublic = dto.IsPublic,
                 Version = 1,
@@ -123,6 +131,7 @@ namespace InventoryApp.Application.Services
             };
 
             _context.Inventories.Add(inventory);
+
             if (dto.Tags != null && dto.Tags.Any())
             {
                 foreach (var tagName in dto.Tags.Select(t => t.Trim().ToLower()).Distinct())
@@ -148,6 +157,7 @@ namespace InventoryApp.Application.Services
                     });
                 }
             }
+
             await _context.SaveChangesAsync();
 
             dto.Id = inventory.Id;
@@ -172,9 +182,15 @@ namespace InventoryApp.Application.Services
             if (!isOwner && !isAdmin)
                 throw new UnauthorizedAccessException();
 
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(c => c.Name == dto.CategoryName);
+
+            if (category == null)
+                throw new Exception("Category not found");
+
             inventory.Title = dto.Title;
             inventory.Description = dto.Description;
-            inventory.CategoryId = dto.CategoryId;
+            inventory.CategoryId = category.Id;
             inventory.IsPublic = dto.IsPublic;
 
             inventory.CustomString1Enabled = dto.CustomString1Enabled;

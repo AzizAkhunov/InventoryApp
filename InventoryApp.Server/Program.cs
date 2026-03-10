@@ -108,28 +108,15 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddAuthorization();
 
 
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("frontend",
-//        policy =>
-//        {
-//            policy.WithOrigins(
-//                "http://localhost:5173",
-//                "https://inventoryapp-front.onrender.com"
-//            )
-//            .AllowAnyHeader()
-//            .AllowAnyMethod();
-//        });
-//});
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("frontend", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true)
+            .WithOrigins(
+                "http://localhost:5173",
+                "https://inventoryapp-front.onrender.com"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -158,6 +145,8 @@ app.MapHub<DiscussionHub>("/hubs/discussion");
 app.UseSwagger();
 app.UseSwaggerUI();
 
+
+app.UseHttpsRedirection();
 
 app.UseCors("frontend");
 

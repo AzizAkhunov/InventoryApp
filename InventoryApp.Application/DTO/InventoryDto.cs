@@ -7,7 +7,7 @@
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
 
-        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; }
 
         public bool IsPublic { get; set; }
 
