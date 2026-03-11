@@ -1,4 +1,5 @@
 ﻿using InventoryApp.Application.Interfaces;
+using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
 using InventoryApp.Server.Hubs;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,8 @@ namespace InventoryApp.Server.Controllers
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var result = await _service.AddPostAsync(userId, inventoryId, content);
 
+
+
             await _hub.Clients
                 .Group(inventoryId.ToString())
                 .SendAsync("ReceiveMessage", result);
@@ -46,16 +49,24 @@ namespace InventoryApp.Server.Controllers
                 .Where(i => i.Id == inventoryId)
                 .Select(i => new { i.OwnerId, i.Title })
                 .FirstAsync();
-
             if (inventory.OwnerId != userId)
             {
+                var notification = new Notification
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = inventory.OwnerId,
+                    InventoryTitle = inventory.Title,
+                    Message = $"{result.AuthorName} wrote in discussion",
+                    IsRead = false,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+
                 await _hub.Clients
                     .User(inventory.OwnerId.ToString())
-                    .SendAsync("NewNotification", new
-                    {
-                        inventoryTitle = inventory.Title,
-                        message = $"{result.AuthorName} wrote in discussion"
-                    });
+                    .SendAsync("NewNotification", notification);
             }
 
             return Ok(result);
