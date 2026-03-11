@@ -13,5 +13,14 @@ namespace InventoryApp.Server.Hubs
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, inventoryId);
         }
+
+        public async Task SendNotification(string userId, string inventoryTitle)
+        {
+            await Clients.User(userId).SendAsync("NewNotification", new
+            {
+                Title = inventoryTitle,
+                message = "New discussion message"
+            });
+        }
     }
 }

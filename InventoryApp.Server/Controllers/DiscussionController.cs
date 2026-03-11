@@ -1,9 +1,11 @@
 ﻿using InventoryApp.Application.Interfaces;
+using InventoryApp.Infrastructure.Data;
+using InventoryApp.Server.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
-using InventoryApp.Server.Hubs;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 
 namespace InventoryApp.Server.Controllers
@@ -14,11 +16,13 @@ namespace InventoryApp.Server.Controllers
     {
         private readonly IHubContext<DiscussionHub> _hub;
         private readonly IDiscussionService _service;
+        private readonly AppDbContext _context;
 
-        public DiscussionController(IDiscussionService service, IHubContext<DiscussionHub> hub)
+        public DiscussionController(IDiscussionService service, IHubContext<DiscussionHub> hub, AppDbContext context)
         {
             _service = service;
             _hub = hub;
+            _context = context;
         }
 
         [HttpGet("{inventoryId:guid}")]
@@ -38,6 +42,22 @@ namespace InventoryApp.Server.Controllers
             await _hub.Clients
                 .Group(inventoryId.ToString())
                 .SendAsync("ReceiveMessage", result);
+
+            var inventory = await _context.Inventories
+                .Where(i => i.Id == inventoryId)
+                .Select(i => new { i.OwnerId, i.Title })
+                .FirstAsync();
+
+            if (inventory.OwnerId != userId)
+            {
+                await _hub.Clients
+                    .User(inventory.OwnerId.ToString())
+                    .SendAsync("NewNotification", new
+                    {
+                        inventoryTitle = inventory.Title,
+                        message = $"{result.AuthorName} wrote in discussion"
+                    });
+            }
 
             return Ok(result);
         }
