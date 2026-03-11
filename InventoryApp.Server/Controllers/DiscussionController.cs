@@ -36,7 +36,6 @@ namespace InventoryApp.Server.Controllers
         public async Task<IActionResult> Post(Guid inventoryId, [FromBody] string content)
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _service.AddPostAsync(userId, inventoryId, content);
 
             await _hub.Clients
@@ -50,6 +49,7 @@ namespace InventoryApp.Server.Controllers
 
             if (inventory.OwnerId != userId)
             {
+                Console.WriteLine("Sending notification");
                 await _hub.Clients
                     //.User(inventory.OwnerId.ToString())
                     .All
