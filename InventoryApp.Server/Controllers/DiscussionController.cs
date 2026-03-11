@@ -49,10 +49,8 @@ namespace InventoryApp.Server.Controllers
 
             if (inventory.OwnerId != userId)
             {
-                Console.WriteLine("Sending notification");
                 await _hub.Clients
-                    //.User(inventory.OwnerId.ToString())
-                    .All
+                    .User(inventory.OwnerId.ToString())
                     .SendAsync("NewNotification", new
                     {
                         inventoryTitle = inventory.Title,
