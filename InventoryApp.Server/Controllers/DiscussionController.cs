@@ -55,6 +55,7 @@ namespace InventoryApp.Server.Controllers
                 {
                     Id = Guid.NewGuid(),
                     UserId = inventory.OwnerId,
+                    InventoryId = inventoryId,
                     InventoryTitle = inventory.Title,
                     Message = $"{result.AuthorName} wrote in discussion",
                     IsRead = false,

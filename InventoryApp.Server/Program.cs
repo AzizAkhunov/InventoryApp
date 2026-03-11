@@ -133,7 +133,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 "http://localhost:5173",
-                "https://inventoryapp-front.onrender.com"
+                "https://inventoryapp-front.onrender.com",
+                "https://inventoryappfrontend.onrender.com"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()

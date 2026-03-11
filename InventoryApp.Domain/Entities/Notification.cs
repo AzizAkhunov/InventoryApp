@@ -10,7 +10,7 @@ namespace InventoryApp.Domain.Entities
     {
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
-
+        public Guid InventoryId { get; set; }   
         public string InventoryTitle { get; set; } = null!;
 
         public string Message { get; set; } = null!;
