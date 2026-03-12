@@ -11,6 +11,6 @@ namespace InventoryApp.Domain.Entities
         public ICollection<Inventory> OwnedInventories { get; set; } = new List<Inventory>();
         public ICollection<InventoryAccess> AccessibleInventories { get; set; } = new List<InventoryAccess>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-        public ICollection<Like> Likes { get; set; } = new List<Like>();
+        public ICollection<ItemLike> Likes { get; set; } = new List<ItemLike>();
     }
 }

@@ -150,19 +150,19 @@ namespace InventoryApp.Infrastructure.Data
 
             //LIKE
 
-            modelBuilder.Entity<Like>()
-            .HasOne(l => l.Item)
-            .WithMany(i => i.Likes)
-            .HasForeignKey(l => l.ItemId)
-            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ItemLike>()
+                .HasOne(l => l.Item)
+                .WithMany(i => i.Likes)
+                .HasForeignKey(l => l.ItemId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Like>()
+            modelBuilder.Entity<ItemLike>()
                 .HasOne(l => l.User)
                 .WithMany(u => u.Likes)
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Like>()
+            modelBuilder.Entity<ItemLike>()
                 .HasIndex(l => new { l.ItemId, l.UserId })
                 .IsUnique();
 
