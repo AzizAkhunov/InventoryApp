@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryApp.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260303095719_Init")]
+    [Migration("20260312211900_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -49,25 +49,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2710),
+                            CreatedAt = new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8337),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2715),
+                            CreatedAt = new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8342),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2717),
+                            CreatedAt = new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8343),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2718),
+                            CreatedAt = new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8344),
                             Name = "Other"
                         });
                 });
@@ -381,10 +381,13 @@ namespace InventoryApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("ItemId", "UserId")
+                        .IsUnique();
+
                     b.ToTable("ItemLikes");
                 });
 
-            modelBuilder.Entity("InventoryApp.Domain.Entities.Like", b =>
+            modelBuilder.Entity("InventoryApp.Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -393,8 +396,19 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ItemId")
+                    b.Property<Guid>("InventoryId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("InventoryTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -403,10 +417,7 @@ namespace InventoryApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("ItemId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("Likes");
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("InventoryApp.Domain.Entities.Tag", b =>
@@ -600,13 +611,13 @@ namespace InventoryApp.Infrastructure.Migrations
             modelBuilder.Entity("InventoryApp.Domain.Entities.ItemLike", b =>
                 {
                     b.HasOne("InventoryApp.Domain.Entities.Item", "Item")
-                        .WithMany()
+                        .WithMany("Likes")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("InventoryApp.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Likes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -616,21 +627,13 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("InventoryApp.Domain.Entities.Like", b =>
+            modelBuilder.Entity("InventoryApp.Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("InventoryApp.Domain.Entities.Item", "Item")
-                        .WithMany("Likes")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InventoryApp.Domain.Entities.User", "User")
-                        .WithMany("Likes")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Item");
 
                     b.Navigation("User");
                 });

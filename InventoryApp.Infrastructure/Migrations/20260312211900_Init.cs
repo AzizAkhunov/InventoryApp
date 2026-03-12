@@ -105,6 +105,29 @@ namespace InventoryApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    InventoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    InventoryTitle = table.Column<string>(type: "text", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: false),
+                    IsRead = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -298,41 +321,15 @@ namespace InventoryApp.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Likes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Likes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Likes_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Likes_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2710), "Equipment" },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2715), "Furniture" },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2717), "Books" },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 3, 9, 57, 19, 119, DateTimeKind.Utc).AddTicks(2718), "Other" }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8337), "Equipment" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8342), "Furniture" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8343), "Books" },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8344), "Other" }
                 });
 
             migrationBuilder.InsertData(
@@ -393,6 +390,12 @@ namespace InventoryApp.Infrastructure.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ItemLikes_ItemId_UserId",
+                table: "ItemLikes",
+                columns: new[] { "ItemId", "UserId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ItemLikes_UserId",
                 table: "ItemLikes",
                 column: "UserId");
@@ -409,14 +412,8 @@ namespace InventoryApp.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_ItemId_UserId",
-                table: "Likes",
-                columns: new[] { "ItemId", "UserId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Likes_UserId",
-                table: "Likes",
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -454,7 +451,7 @@ namespace InventoryApp.Infrastructure.Migrations
                 name: "ItemLikes");
 
             migrationBuilder.DropTable(
-                name: "Likes");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Tags");
