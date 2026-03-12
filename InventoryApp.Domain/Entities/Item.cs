@@ -31,6 +31,6 @@
         public string? Doc2 { get; set; }
         public string? Doc3 { get; set; }
 
-        public ICollection<Like> Likes { get; set; } = new List<Like>();
+        public ICollection<ItemLike> Likes { get; set; } = new List<ItemLike>();
     }
 }
