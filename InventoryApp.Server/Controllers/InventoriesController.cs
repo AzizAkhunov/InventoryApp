@@ -1,5 +1,6 @@
 ﻿using InventoryApp.Application.DTO;
 using InventoryApp.Application.Interfaces;
+using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -145,6 +146,34 @@ namespace InventoryApp.Server.Controllers
             var result = await _inventoryService.GetStatisticsAsync(id);
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("{inventoryId:guid}/custom-id")]
+        public async Task<IActionResult> SaveCustomId(Guid inventoryId, [FromBody] List<InventoryIdElementDto> elements)
+        {
+            var existing = _context.InventoryIdElements
+                .Where(e => e.InventoryId == inventoryId);
+
+            _context.InventoryIdElements.RemoveRange(existing);
+
+            var order = 0;
+
+            foreach (var el in elements)
+            {
+                _context.InventoryIdElements.Add(new InventoryIdElement
+                {
+                    InventoryId = inventoryId,
+                    Order = order++,
+                    Type = el.Type,
+                    FixedText = el.FixedText,
+                    Padding = el.Padding
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
