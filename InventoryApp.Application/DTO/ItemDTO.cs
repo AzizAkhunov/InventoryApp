@@ -8,6 +8,8 @@
 
         public string? CustomId { get; set; }
 
+        public int LikesCount { get; set; }
+
         public int Version { get; set; }
 
         public string? Text1 { get; set; }

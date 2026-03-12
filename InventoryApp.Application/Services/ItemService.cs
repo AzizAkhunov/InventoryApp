@@ -27,6 +27,7 @@ namespace InventoryApp.Application.Services
                     InventoryId = i.InventoryId,
                     CustomId = i.CustomId,
                     Version = i.Version,
+                    LikesCount = i.Likes.Count,
 
                     Text1 = i.Text1,
                     Text2 = i.Text2,
@@ -61,6 +62,7 @@ namespace InventoryApp.Application.Services
                     InventoryId = i.InventoryId,
                     CustomId = i.CustomId,
                     Version = i.Version,
+                    LikesCount = i.Likes.Count,
 
                     Text1 = i.Text1,
                     Text2 = i.Text2,
