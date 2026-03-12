@@ -19,10 +19,14 @@ namespace InventoryApp.Server.Controllers
             _itemService = itemService;
         }
 
+        [Authorize]
         [HttpGet("by-inventory/{inventoryId:guid}")]
         public async Task<ActionResult<List<ItemDto>>> GetByInventory(Guid inventoryId)
         {
-            var result = await _itemService.GetByInventoryAsync(inventoryId);
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _itemService.GetByInventoryAsync(inventoryId, userId);
+
             return Ok(result);
         }
 

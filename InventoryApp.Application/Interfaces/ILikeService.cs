@@ -2,6 +2,6 @@
 {
     public interface ILikeService
     {
-        Task<int> ToggleLikeAsync(Guid userId, Guid itemId);
+        Task<(int likesCount, bool likedByMe)> ToggleLikeAsync(Guid userId, Guid itemId);
     }
 }

@@ -23,9 +23,13 @@ namespace InventoryApp.Server.Controllers
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var count = await _service.ToggleLikeAsync(userId, itemId);
+            var result = await _service.ToggleLikeAsync(userId, itemId);
 
-            return Ok(new { Likes = count });
+            return Ok(new
+            {
+                likesCount = result.likesCount,
+                likedByMe = result.likedByMe
+            });
         }
     }
 }

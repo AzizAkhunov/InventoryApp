@@ -17,7 +17,7 @@ namespace InventoryApp.Application.Services
             _idGenerator = idGenerator;
         }
 
-        public async Task<List<ItemDto>> GetByInventoryAsync(Guid inventoryId)
+        public async Task<List<ItemDto>> GetByInventoryAsync(Guid inventoryId, Guid userId)
         {
             return await _context.Items
                 .Where(i => i.InventoryId == inventoryId)
@@ -28,6 +28,7 @@ namespace InventoryApp.Application.Services
                     CustomId = i.CustomId,
                     Version = i.Version,
                     LikesCount = i.Likes.Count,
+                    LikedByMe = i.Likes.Any(e => e.UserId == userId),
 
                     Text1 = i.Text1,
                     Text2 = i.Text2,

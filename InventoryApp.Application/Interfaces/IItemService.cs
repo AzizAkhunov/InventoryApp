@@ -4,7 +4,7 @@ namespace InventoryApp.Application.Interfaces
 {
     public interface IItemService
     {
-        Task<List<ItemDto>> GetByInventoryAsync(Guid inventoryId);
+        Task<List<ItemDto>> GetByInventoryAsync(Guid inventoryId,Guid userId);
 
         Task<ItemDto?> GetByIdAsync(Guid id);
 

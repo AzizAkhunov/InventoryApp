@@ -14,14 +14,17 @@ namespace InventoryApp.Application.Services
             _context = context;
         }
 
-        public async Task<int> ToggleLikeAsync(Guid userId, Guid itemId)
+        public async Task<(int likesCount, bool likedByMe)> ToggleLikeAsync(Guid userId, Guid itemId)
         {
             var existing = await _context.ItemLikes
                 .FirstOrDefaultAsync(l => l.ItemId == itemId && l.UserId == userId);
 
+            bool likedByMe;
+
             if (existing != null)
             {
                 _context.ItemLikes.Remove(existing);
+                likedByMe = false;
             }
             else
             {
@@ -30,12 +33,16 @@ namespace InventoryApp.Application.Services
                     ItemId = itemId,
                     UserId = userId
                 });
+
+                likedByMe = true;
             }
 
             await _context.SaveChangesAsync();
 
-            return await _context.ItemLikes
+            var count = await _context.ItemLikes
                 .CountAsync(l => l.ItemId == itemId);
+
+            return (count, likedByMe);
         }
     }
 }
