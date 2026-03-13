@@ -1,4 +1,5 @@
-﻿using InventoryApp.Application.Interfaces;
+﻿using InventoryApp.Application.Extensions;
+using InventoryApp.Application.Interfaces;
 using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
 using InventoryApp.Server.Hubs;
@@ -36,7 +37,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost("{inventoryId:guid}")]
         public async Task<IActionResult> Post(Guid inventoryId, [FromBody] string content)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
             var result = await _service.AddPostAsync(userId, inventoryId, content);
 
 

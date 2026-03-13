@@ -1,4 +1,5 @@
-﻿using InventoryApp.Infrastructure.Data;
+﻿using InventoryApp.Application.Extensions;
+using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var notifications = _context.Notifications
                 .Where(n => n.UserId == userId && !n.IsRead)
@@ -38,7 +39,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPatch("{id:guid}/read")]
         public async Task<IActionResult> MarkAsRead(Guid id)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var notification = await _context.Notifications
                 .FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId);
@@ -57,7 +58,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("unread-count")]
         public IActionResult GetUnreadCount()
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var count = _context.Notifications
                 .Count(n => n.UserId == userId && !n.IsRead);

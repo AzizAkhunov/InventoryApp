@@ -1,4 +1,5 @@
-﻿using InventoryApp.Application.Interfaces;
+﻿using InventoryApp.Application.Extensions;
+using InventoryApp.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -26,7 +27,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost("{userId:guid}")]
         public async Task<IActionResult> AddAccess(Guid inventoryId, Guid userId)
         {
-            var ownerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var ownerId = User.GetUserId();
 
             try
             {
@@ -43,7 +44,7 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("{userId:guid}")]
         public async Task<IActionResult> RemoveAccess(Guid inventoryId, Guid userId)
         {
-            var ownerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var ownerId = User.GetUserId();
 
             try
             {

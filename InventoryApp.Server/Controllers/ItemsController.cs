@@ -1,4 +1,5 @@
 ﻿using InventoryApp.Application.DTO;
+using InventoryApp.Application.Extensions;
 using InventoryApp.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("by-inventory/{inventoryId:guid}")]
         public async Task<ActionResult<List<ItemDto>>> GetByInventory(Guid inventoryId)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var result = await _itemService.GetByInventoryAsync(inventoryId, userId);
 
@@ -45,7 +46,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemDto>> Create([FromBody] CreateItemDto dto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             try
             {
@@ -62,8 +63,8 @@ namespace InventoryApp.Server.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<ItemDto>> Update(Guid id, [FromBody] ItemDto dto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            
+            var userId = User.GetUserId();
+
             try
             {
                 var result = await _itemService.UpdateAsync(userId, id, dto);
@@ -87,7 +88,7 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             try
             {

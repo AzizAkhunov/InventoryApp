@@ -1,4 +1,5 @@
 ﻿using InventoryApp.Application.DTO;
+using InventoryApp.Application.Extensions;
 using InventoryApp.Application.Interfaces;
 using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
@@ -28,7 +29,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("my")]
         public async Task<IActionResult> GetMyInventories()
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var inventories = await _context.Inventories
                 .Where(i => i.OwnerId == userId)
@@ -49,7 +50,7 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("shared")]
         public async Task<IActionResult> GetSharedInventories()
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var inventories = await _context.InventoryAccesses
                 .Where(a => a.UserId == userId)
@@ -89,7 +90,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<InventoryDto>> Create([FromBody] InventoryDto dto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
             var result = await _inventoryService.CreateAsync(userId, dto);
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
@@ -98,7 +99,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<InventoryDto>> Update(Guid id, [FromBody] InventoryDto dto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             try
             {
@@ -123,7 +124,7 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             try
             {

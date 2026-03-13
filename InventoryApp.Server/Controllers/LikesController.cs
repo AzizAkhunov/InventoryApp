@@ -1,4 +1,5 @@
-﻿using InventoryApp.Application.Interfaces;
+﻿using InventoryApp.Application.Extensions;
+using InventoryApp.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace InventoryApp.Server.Controllers
         [HttpPost("{itemId:guid}")]
         public async Task<IActionResult> Toggle(Guid itemId)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             var result = await _service.ToggleLikeAsync(userId, itemId);
 
