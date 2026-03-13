@@ -175,5 +175,28 @@ namespace InventoryApp.Server.Controllers
 
             return Ok();
         }
+
+        [HttpGet("by-tag")]
+        public async Task<IActionResult> GetByTag([FromQuery] string tag)
+        {
+            if (string.IsNullOrWhiteSpace(tag))
+                return Ok(new List<InventoryDto>());
+
+            var inventories = await _context.InventoryTags
+                .Where(it => it.Tag.Name.ToLower() == tag.ToLower())
+                .Select(it => it.Inventory)
+                .Select(i => new InventoryDto
+                {
+                    Id = i.Id,
+                    Title = i.Title,
+                    Description = i.Description,
+                    CategoryName = i.Category.Name,
+                    ImageUrl = i.ImageUrl,
+                    IsPublic = i.IsPublic
+                })
+                .ToListAsync();
+
+            return Ok(inventories);
+        }
     }
 }
