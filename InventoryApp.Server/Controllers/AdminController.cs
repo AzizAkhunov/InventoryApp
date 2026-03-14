@@ -83,5 +83,57 @@ namespace InventoryApp.Server.Controllers
 
             return Ok();
         }
+
+        [Authorize]
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var users = await _context.Users.CountAsync();
+            var inventories = await _context.Inventories.CountAsync();
+            var items = await _context.Items.CountAsync();
+            var blockedUsers = await _context.Users.CountAsync(x => x.IsBlocked);
+
+            return Ok(new
+            {
+                users,
+                inventories,
+                items,
+                blockedUsers
+            });
+        }
+
+        [Authorize]
+        [HttpGet("inventories")]
+        public async Task<IActionResult> GetInventories()
+        {
+            var inventories = await _context.Inventories
+                .Include(i => i.Owner)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Title,
+                    Owner = i.Owner.UserName,
+                    i.IsPublic,
+                    i.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(inventories);
+        }
+
+        [Authorize]
+        [HttpDelete("inventories/{id:guid}")]
+        public async Task<IActionResult> DeleteInventory(Guid id)
+        {
+            var inv = await _context.Inventories.FindAsync(id);
+            if (inv == null) return NotFound();
+
+            _context.Inventories.Remove(inv);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+
     }
 }
