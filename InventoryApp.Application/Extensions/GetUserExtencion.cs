@@ -2,7 +2,7 @@
 
 namespace InventoryApp.Application.Extensions
 {
-    public static class Extensions
+    public static class GetUserExtencion
     {
         public static Guid GetUserId(this ClaimsPrincipal user)
         {
