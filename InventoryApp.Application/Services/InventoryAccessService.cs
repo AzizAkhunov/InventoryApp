@@ -22,7 +22,7 @@ namespace InventoryApp.Application.Services
                 .Include(x => x.User)
                 .Select(x => new InventoryAccessDto
                 {
-                    UserId = x.UserId,
+                    Id = x.UserId,
                     UserName = x.User.UserName,
                     Email = x.User.Email
                 })
