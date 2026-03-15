@@ -12,6 +12,7 @@
         public bool IsPublic { get; set; }
         public string? ImageUrl { get; set; }
 
+        public int ItemsCount { get; set; }
         public int Version { get; set; }
 
         // Custom string fields
