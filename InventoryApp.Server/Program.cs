@@ -89,6 +89,7 @@ builder.Services.AddScoped<ILikeService,LikeService>();
 builder.Services.AddScoped<IJwtService,JwtService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddSignalR();
 

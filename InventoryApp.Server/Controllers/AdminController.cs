@@ -1,4 +1,5 @@
-﻿using InventoryApp.Domain.Entities;
+﻿using InventoryApp.Application.Interfaces;
+using InventoryApp.Domain.Entities;
 using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,50 +12,36 @@ namespace InventoryApp.Server.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdminService _adminService;
 
-        public AdminController(AppDbContext context)
+        public AdminController(IAdminService adminService)
         {
-            _context = context;
+            _adminService = adminService;
         }
 
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _context.Users
-                .Select(u => new
-                {
-                    u.Id,
-                    u.UserName,
-                    u.Email,
-                    u.IsAdmin,
-                    u.IsBlocked
-                })
-                .ToListAsync();
-
+            var users = await _adminService.GetUsersAsync();
             return Ok(users);
         }
+
         [Authorize]
         [HttpPost("block/{userId:guid}")]
         public async Task<IActionResult> Block(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
-
-            user.IsBlocked = true;
-            await _context.SaveChangesAsync();
+            var result = await _adminService.BlockUserAsync(userId);
+            if (!result) return NotFound();
 
             return Ok();
         }
+
         [Authorize]
         [HttpPost("unblock/{userId:guid}")]
         public async Task<IActionResult> Unblock(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
-
-            user.IsBlocked = false;
-            await _context.SaveChangesAsync();
+            var result = await _adminService.UnblockUserAsync(userId);
+            if (!result) return NotFound();
 
             return Ok();
         }
@@ -63,23 +50,18 @@ namespace InventoryApp.Server.Controllers
         [HttpPost("make-admin/{userId:guid}")]
         public async Task<IActionResult> MakeAdmin(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
-
-            user.IsAdmin = true;
-            await _context.SaveChangesAsync();
+            var result = await _adminService.MakeAdminAsync(userId);
+            if (!result) return NotFound();
 
             return Ok();
         }
+
         [Authorize]
         [HttpPost("remove-admin/{userId:guid}")]
         public async Task<IActionResult> RemoveAdmin(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
-
-            user.IsAdmin = false;
-            await _context.SaveChangesAsync();
+            var result = await _adminService.RemoveAdminAsync(userId);
+            if (!result) return NotFound();
 
             return Ok();
         }
@@ -88,36 +70,15 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("stats")]
         public async Task<IActionResult> GetStats()
         {
-            var users = await _context.Users.CountAsync();
-            var inventories = await _context.Inventories.CountAsync();
-            var items = await _context.Items.CountAsync();
-            var blockedUsers = await _context.Users.CountAsync(x => x.IsBlocked);
-
-            return Ok(new
-            {
-                users,
-                inventories,
-                items,
-                blockedUsers
-            });
+            var stats = await _adminService.GetStatsAsync();
+            return Ok(stats);
         }
 
         [Authorize]
         [HttpGet("inventories")]
         public async Task<IActionResult> GetInventories()
         {
-            var inventories = await _context.Inventories
-                .Include(i => i.Owner)
-                .Select(i => new
-                {
-                    i.Id,
-                    i.Title,
-                    Owner = i.Owner.UserName,
-                    i.IsPublic,
-                    i.CreatedAt
-                })
-                .ToListAsync();
-
+            var inventories = await _adminService.GetInventoriesAsync();
             return Ok(inventories);
         }
 
@@ -125,15 +86,11 @@ namespace InventoryApp.Server.Controllers
         [HttpDelete("inventories/{id:guid}")]
         public async Task<IActionResult> DeleteInventory(Guid id)
         {
-            var inv = await _context.Inventories.FindAsync(id);
-            if (inv == null) return NotFound();
-
-            _context.Inventories.Remove(inv);
-            await _context.SaveChangesAsync();
+            var result = await _adminService.DeleteInventoryAsync(id);
+            if (!result) return NotFound();
 
             return Ok();
         }
-
 
     }
 }
