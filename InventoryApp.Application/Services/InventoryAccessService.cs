@@ -17,7 +17,11 @@ namespace InventoryApp.Application.Services
 
         public async Task<List<InventoryAccessDto>> GetAccessListAsync(Guid inventoryId)
         {
-            return await _context.InventoryAccesses
+            var inventory = await _context.Inventories
+                .Include(i => i.Owner)
+                .FirstAsync(i => i.Id == inventoryId);
+
+            var accesses = await _context.InventoryAccesses
                 .Where(x => x.InventoryId == inventoryId)
                 .Include(x => x.User)
                 .Select(x => new InventoryAccessDto
@@ -27,8 +31,16 @@ namespace InventoryApp.Application.Services
                     Email = x.User.Email
                 })
                 .ToListAsync();
-        }
 
+            accesses.Insert(0, new InventoryAccessDto
+            {
+                Id = inventory.Owner.Id,
+                UserName = inventory.Owner.UserName,
+                Email = inventory.Owner.Email
+            });
+
+            return accesses;
+        }
         public async Task AddAccessAsync(Guid ownerId, Guid inventoryId, Guid userId)
         {
             var inventory = await _context.Inventories
