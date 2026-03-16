@@ -71,6 +71,14 @@ namespace InventoryApp.Application.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> DeleteUserAsync(Guid userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null) return false;
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<object> GetStatsAsync()
         {

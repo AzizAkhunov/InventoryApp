@@ -59,7 +59,7 @@ namespace InventoryApp.Server.Controllers
             if (!result) return NotFound();
 
             return Ok();
-        }
+        }        
 
         [Authorize]
         [HttpPost("unblock/{userId:guid}")]
@@ -132,6 +132,19 @@ namespace InventoryApp.Server.Controllers
             var result = await _adminService.DeleteInventoryAsync(id);
             if (!result) return NotFound();
 
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete("users/{id:guid}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            if (!await IsCurrentUserAdmin())
+                return Forbid();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) return NotFound();
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
             return Ok();
         }
     }
