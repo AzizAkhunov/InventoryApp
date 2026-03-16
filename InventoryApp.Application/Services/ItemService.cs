@@ -87,7 +87,7 @@ namespace InventoryApp.Application.Services
                 })
                 .FirstOrDefaultAsync();
         }
-
+        
         public async Task<ItemDto> CreateAsync(Guid userId, CreateItemDto dto)
         {
             var inventory = await _context.Inventories

@@ -51,6 +51,7 @@ namespace InventoryApp.Server.Controllers
             var userId = User.GetUserId();
 
             var inventories = await _context.InventoryAccesses
+                .Include(a=> a.Inventory)
                 .Where(a => a.UserId == userId)
                 .Select(a => new
                 {
@@ -58,7 +59,10 @@ namespace InventoryApp.Server.Controllers
                     a.Inventory.Title,
                     a.Inventory.Description,
                     a.Inventory.ImageUrl,
-                    a.Inventory.IsPublic
+                    a.Inventory.IsPublic,
+                    a.Inventory.Category.Name,
+                    ItemsCount = a.Inventory.Items.Count
+
                 })
                 .ToListAsync();
 
