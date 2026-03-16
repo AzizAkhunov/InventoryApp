@@ -18,8 +18,8 @@ namespace InventoryApp.Application.Services
         public async Task<List<InventoryDto>> GetAllAsync()
         {
             var inventories = await _context.Inventories
+                .AsNoTracking()
                 .Include(i => i.Category)
-                .Include(i => i.Items)
                 .ToListAsync();
 
             return inventories.Select(i => new InventoryDto
@@ -30,8 +30,8 @@ namespace InventoryApp.Application.Services
                 CategoryName = i.Category.Name,
                 IsPublic = i.IsPublic,
                 ImageUrl = i.ImageUrl,
-                Version = i.Version,
-                ItemsCount = i.Items.Count,
+                Version = i.Version ?? Array.Empty<byte>(),
+                ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
 
                 CustomString1Enabled = i.CustomString1Enabled,
                 CustomString1Name = i.CustomString1Name,
@@ -59,6 +59,7 @@ namespace InventoryApp.Application.Services
         public async Task<InventoryDto?> GetByIdAsync(Guid id)
         {
             var inventory = await _context.Inventories
+                .AsNoTracking()
                 .Include(i => i.Category)
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(i => i.Id == id);
@@ -71,11 +72,11 @@ namespace InventoryApp.Application.Services
                 Id = inventory.Id,
                 Title = inventory.Title,
                 Description = inventory.Description,
-                CategoryName = inventory.Category.Name,
+                CategoryName = inventory.Category?.Name ?? "",
                 IsPublic = inventory.IsPublic,
                 ImageUrl = inventory.ImageUrl,
-                Version = inventory.Version,
-                ItemsCount = inventory.Items.Count,
+                Version = inventory.Version ?? Array.Empty<byte>(),
+                ItemsCount = inventory.Items?.Count ?? 0,
 
                 CustomString1Enabled = inventory.CustomString1Enabled,
                 CustomString1Name = inventory.CustomString1Name,
