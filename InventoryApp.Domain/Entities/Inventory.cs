@@ -1,4 +1,6 @@
-﻿namespace InventoryApp.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InventoryApp.Domain.Entities
 {
     public class Inventory : BaseEntity
     {
@@ -15,7 +17,8 @@
         public Guid OwnerId { get; set; }
         public User Owner { get; set; } = null!;
 
-        public int Version { get; set; }
+        [Timestamp]
+        public byte[] Version { get; set; }
 
         // ===== Custom STRING fields =====
         public bool CustomString1Enabled { get; set; }

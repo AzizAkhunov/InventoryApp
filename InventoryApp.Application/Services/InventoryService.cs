@@ -198,21 +198,12 @@ namespace InventoryApp.Application.Services
             inventory.IsPublic = dto.IsPublic;
             inventory.ImageUrl = dto.ImageUrl;
 
-            inventory.CustomString1Enabled = dto.CustomString1Enabled;
-            inventory.CustomString1Name = dto.CustomString1Name;
+            _context.Entry(inventory).Property("Version").OriginalValue = dto.Version;
 
-            inventory.Version = dto.Version;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
+            await _context.SaveChangesAsync();
 
             dto.Version = inventory.Version;
+
             return dto;
         }
 
