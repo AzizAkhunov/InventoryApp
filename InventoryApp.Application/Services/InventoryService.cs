@@ -186,11 +186,17 @@ namespace InventoryApp.Application.Services
             if (!isOwner && !isAdmin)
                 throw new UnauthorizedAccessException();
 
+            if (inventory.Version != dto.Version)
+                throw new DbUpdateConcurrencyException("Inventory was modified by another user.");
+
             var category = await _context.Categories
                 .FirstOrDefaultAsync(c => c.Name == dto.CategoryName);
 
             if (category == null)
                 throw new Exception("Category not found");
+
+            if (inventory.Version != dto.Version)
+                throw new DbUpdateConcurrencyException("Inventory was modified by another user.");
 
             inventory.Title = dto.Title;
             inventory.Description = dto.Description;
@@ -198,11 +204,12 @@ namespace InventoryApp.Application.Services
             inventory.IsPublic = dto.IsPublic;
             inventory.ImageUrl = dto.ImageUrl;
 
-            inventory.Version = dto.Version;
+            inventory.Version++;
 
             try
             {
                 await _context.SaveChangesAsync();
+                dto.Version = inventory.Version;
             }
             catch (DbUpdateConcurrencyException)
             {
