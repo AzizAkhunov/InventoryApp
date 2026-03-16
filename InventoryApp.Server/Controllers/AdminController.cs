@@ -27,9 +27,12 @@ namespace InventoryApp.Server.Controllers
             if (userId == null)
                 return false;
 
+            if (!Guid.TryParse(userId, out var guid))
+                return false;
+
             var user = await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id.ToString() == userId);
+                .FirstOrDefaultAsync(x => x.Id == guid);
 
             return user != null && user.IsAdmin;
         }
