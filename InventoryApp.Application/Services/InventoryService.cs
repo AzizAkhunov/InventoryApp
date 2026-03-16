@@ -17,88 +17,81 @@ namespace InventoryApp.Application.Services
 
         public async Task<List<InventoryDto>> GetAllAsync()
         {
-            var inventories = await _context.Inventories
-                .AsNoTracking()
+            return await _context.Inventories
                 .Include(i => i.Category)
+                .Select(i => new InventoryDto
+                {
+                    Id = i.Id,
+                    Title = i.Title,
+                    Description = i.Description,
+                    CategoryName = i.Category.Name,
+                    IsPublic = i.IsPublic,
+                    Version = i.Version,
+                    ImageUrl = i.ImageUrl,
+                    ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
+
+                    CustomString1Enabled = i.CustomString1Enabled,
+                    CustomString1Name = i.CustomString1Name,
+                    CustomString2Enabled = i.CustomString2Enabled,
+                    CustomString2Name = i.CustomString2Name,
+                    CustomString3Enabled = i.CustomString3Enabled,
+                    CustomString3Name = i.CustomString3Name,
+
+                    CustomNumber1Enabled = i.CustomNumber1Enabled,
+                    CustomNumber1Name = i.CustomNumber1Name,
+                    CustomNumber2Enabled = i.CustomNumber2Enabled,
+                    CustomNumber2Name = i.CustomNumber2Name,
+                    CustomNumber3Enabled = i.CustomNumber3Enabled,
+                    CustomNumber3Name = i.CustomNumber3Name,
+
+                    CustomBool1Enabled = i.CustomBool1Enabled,
+                    CustomBool1Name = i.CustomBool1Name,
+                    CustomBool2Enabled = i.CustomBool2Enabled,
+                    CustomBool2Name = i.CustomBool2Name,
+                    CustomBool3Enabled = i.CustomBool3Enabled,
+                    CustomBool3Name = i.CustomBool3Name
+                })
                 .ToListAsync();
-
-            return inventories.Select(i => new InventoryDto
-            {
-                Id = i.Id,
-                Title = i.Title,
-                Description = i.Description,
-                CategoryName = i.Category.Name,
-                IsPublic = i.IsPublic,
-                ImageUrl = i.ImageUrl,
-                Version = i.Version ?? Array.Empty<byte>(),
-                ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
-
-                CustomString1Enabled = i.CustomString1Enabled,
-                CustomString1Name = i.CustomString1Name,
-                CustomString2Enabled = i.CustomString2Enabled,
-                CustomString2Name = i.CustomString2Name,
-                CustomString3Enabled = i.CustomString3Enabled,
-                CustomString3Name = i.CustomString3Name,
-
-                CustomNumber1Enabled = i.CustomNumber1Enabled,
-                CustomNumber1Name = i.CustomNumber1Name,
-                CustomNumber2Enabled = i.CustomNumber2Enabled,
-                CustomNumber2Name = i.CustomNumber2Name,
-                CustomNumber3Enabled = i.CustomNumber3Enabled,
-                CustomNumber3Name = i.CustomNumber3Name,
-
-                CustomBool1Enabled = i.CustomBool1Enabled,
-                CustomBool1Name = i.CustomBool1Name,
-                CustomBool2Enabled = i.CustomBool2Enabled,
-                CustomBool2Name = i.CustomBool2Name,
-                CustomBool3Enabled = i.CustomBool3Enabled,
-                CustomBool3Name = i.CustomBool3Name
-            }).ToList();
         }
 
         public async Task<InventoryDto?> GetByIdAsync(Guid id)
         {
-            var inventory = await _context.Inventories
-                .AsNoTracking()
+            return await _context.Inventories
                 .Include(i => i.Category)
-                .Include(i => i.Items)
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .Where(i => i.Id == id)
+                .Select(i => new InventoryDto
+                {
+                    Id = i.Id,
+                    Title = i.Title,
+                    Description = i.Description,
+                    CategoryName = i.Category.Name,
+                    IsPublic = i.IsPublic,
+                    Version = i.Version,
+                    ImageUrl = i.ImageUrl,
+                    ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
 
-            if (inventory == null)
-                return null;
+                    CustomString1Enabled = i.CustomString1Enabled,
+                    CustomString1Name = i.CustomString1Name,
+                    CustomString2Enabled = i.CustomString2Enabled,
+                    CustomString2Name = i.CustomString2Name,
+                    CustomString3Enabled = i.CustomString3Enabled,
+                    CustomString3Name = i.CustomString3Name,
 
-            return new InventoryDto
-            {
-                Id = inventory.Id,
-                Title = inventory.Title,
-                Description = inventory.Description,
-                CategoryName = inventory.Category?.Name ?? "",
-                IsPublic = inventory.IsPublic,
-                ImageUrl = inventory.ImageUrl,
-                Version = inventory.Version ?? Array.Empty<byte>(),
-                ItemsCount = inventory.Items?.Count ?? 0,
+                    CustomNumber1Enabled = i.CustomNumber1Enabled,
+                    CustomNumber1Name = i.CustomNumber1Name,
+                    CustomNumber2Enabled = i.CustomNumber2Enabled,
+                    CustomNumber2Name = i.CustomNumber2Name,
+                    CustomNumber3Enabled = i.CustomNumber3Enabled,
+                    CustomNumber3Name = i.CustomNumber3Name,
 
-                CustomString1Enabled = inventory.CustomString1Enabled,
-                CustomString1Name = inventory.CustomString1Name,
-                CustomString2Enabled = inventory.CustomString2Enabled,
-                CustomString2Name = inventory.CustomString2Name,
-                CustomString3Enabled = inventory.CustomString3Enabled,
-                CustomString3Name = inventory.CustomString3Name,
-
-                CustomNumber1Enabled = inventory.CustomNumber1Enabled,
-                CustomNumber1Name = inventory.CustomNumber1Name,
-                CustomNumber2Enabled = inventory.CustomNumber2Enabled,
-                CustomNumber2Name = inventory.CustomNumber2Name,
-                CustomNumber3Enabled = inventory.CustomNumber3Enabled,
-                CustomNumber3Name = inventory.CustomNumber3Name,
-
-                CustomBool1Enabled = inventory.CustomBool1Enabled,
-                CustomBool1Name = inventory.CustomBool1Name,
-                CustomBool2Enabled = inventory.CustomBool2Enabled,
-                CustomBool2Name = inventory.CustomBool2Name,
-                CustomBool3Enabled = inventory.CustomBool3Enabled,
-                CustomBool3Name = inventory.CustomBool3Name
-            };
+                    CustomBool1Enabled = i.CustomBool1Enabled,
+                    CustomBool1Name = i.CustomBool1Name,
+                    CustomBool2Enabled = i.CustomBool2Enabled,
+                    CustomBool2Name = i.CustomBool2Name,
+                    CustomBool3Enabled = i.CustomBool3Enabled,
+                    CustomBool3Name = i.CustomBool3Name
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<InventoryDto> CreateAsync(Guid userId, InventoryDto dto)
@@ -117,6 +110,7 @@ namespace InventoryApp.Application.Services
                 CategoryId = category.Id,
                 OwnerId = userId,
                 IsPublic = dto.IsPublic,
+                Version = 1,
 
                 CustomString1Enabled = dto.CustomString1Enabled,
                 CustomString1Name = dto.CustomString1Name,
@@ -204,7 +198,7 @@ namespace InventoryApp.Application.Services
             inventory.IsPublic = dto.IsPublic;
             inventory.ImageUrl = dto.ImageUrl;
 
-            _context.Entry(inventory).Property("Version").OriginalValue = dto.Version;
+            inventory.Version = dto.Version;
 
             try
             {
@@ -212,11 +206,10 @@ namespace InventoryApp.Application.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw new DbUpdateConcurrencyException("Inventory was modified by another user.");
+                throw;
             }
 
             dto.Version = inventory.Version;
-
             return dto;
         }
 

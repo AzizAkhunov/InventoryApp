@@ -16,9 +16,7 @@ namespace InventoryApp.Domain.Entities
 
         public Guid OwnerId { get; set; }
         public User Owner { get; set; } = null!;
-
-        [Timestamp]
-        public byte[]? Version { get; set; }
+        public int Version { get; set; }
 
         // ===== Custom STRING fields =====
         public bool CustomString1Enabled { get; set; }
