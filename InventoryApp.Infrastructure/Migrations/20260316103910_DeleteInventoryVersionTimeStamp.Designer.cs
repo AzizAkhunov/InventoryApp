@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryApp.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260316101533_AddInventoryVersionTimeStamp")]
-    partial class AddInventoryVersionTimeStamp
+    [Migration("20260316103910_DeleteInventoryVersionTimeStamp")]
+    partial class DeleteInventoryVersionTimeStamp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,25 +49,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 16, 10, 15, 32, 568, DateTimeKind.Utc).AddTicks(1497),
+                            CreatedAt = new DateTime(2026, 3, 16, 10, 39, 10, 113, DateTimeKind.Utc).AddTicks(8422),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 16, 10, 15, 32, 568, DateTimeKind.Utc).AddTicks(1506),
+                            CreatedAt = new DateTime(2026, 3, 16, 10, 39, 10, 113, DateTimeKind.Utc).AddTicks(8427),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 16, 10, 15, 32, 568, DateTimeKind.Utc).AddTicks(1507),
+                            CreatedAt = new DateTime(2026, 3, 16, 10, 39, 10, 113, DateTimeKind.Utc).AddTicks(8428),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 3, 16, 10, 15, 32, 568, DateTimeKind.Utc).AddTicks(1508),
+                            CreatedAt = new DateTime(2026, 3, 16, 10, 39, 10, 113, DateTimeKind.Utc).AddTicks(8429),
                             Name = "Other"
                         });
                 });
@@ -210,10 +210,9 @@ namespace InventoryApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Version")
+                    b.Property<int>("Version")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
