@@ -110,7 +110,6 @@ namespace InventoryApp.Application.Services
                 CategoryId = category.Id,
                 OwnerId = userId,
                 IsPublic = dto.IsPublic,
-                Version = 1,
 
                 CustomString1Enabled = dto.CustomString1Enabled,
                 CustomString1Name = dto.CustomString1Name,
