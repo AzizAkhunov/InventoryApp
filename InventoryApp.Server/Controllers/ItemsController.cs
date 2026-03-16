@@ -23,7 +23,15 @@ namespace InventoryApp.Server.Controllers
         [HttpGet("by-inventory/{inventoryId:guid}")]
         public async Task<ActionResult<List<ItemDto>>> GetByInventory(Guid inventoryId)
         {
-            var userId = User.GetUserId();
+            Guid? userId = null;
+
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim != null)
+            {
+                userId = Guid.Parse(claim.Value);
+            }
+
 
             var result = await _itemService.GetByInventoryAsync(inventoryId, userId);
 
