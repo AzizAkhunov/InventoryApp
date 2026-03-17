@@ -50,19 +50,22 @@ namespace InventoryApp.Application.Services
                         sb.Append(element.FixedText);
                         break;
                     case IdElementType.Random20Bit:
-                        sb.Append(Random.Shared.Next(0, 1 << 20));
-                        break;
+                        {
+                            int value = Random.Shared.Next(0, 1 << 20);
+                            sb.Append(value.ToString("X5"));
+                            break;
+                        }
 
                     case IdElementType.Random32Bit:
                         sb.Append(Random.Shared.NextInt64(0, 1L << 32));
                         break;
 
                     case IdElementType.Random6Digit:
-                        sb.Append(Random.Shared.Next(100000, 999999));
+                        sb.Append(Random.Shared.Next(100000, 100000));
                         break;
 
                     case IdElementType.Random9Digit:
-                        sb.Append(Random.Shared.Next(100000000, 999999999));
+                        sb.Append(Random.Shared.Next(100000000, 1000000000));
                         break;
 
                     case IdElementType.Guid:
@@ -74,68 +77,76 @@ namespace InventoryApp.Application.Services
                         break;
 
                     case IdElementType.Sequence:
-
-                        int sequenceLength = element.Padding ?? 1;
-
-                        int prefixLength = 0;
-
-                        foreach (var prev in elements.Where(e => e.Order < element.Order))
                         {
-                            switch (prev.Type)
+                            int sequenceLength = element.Padding ?? 1;
+
+                            int prefixLength = 0;
+
+                            foreach (var prev in elements.Where(e => e.Order < element.Order))
                             {
-                                case IdElementType.FixedText:
-                                    prefixLength += prev.FixedText?.Length ?? 0;
-                                    break;
+                                switch (prev.Type)
+                                {
+                                    case IdElementType.FixedText:
+                                        prefixLength += prev.FixedText?.Length ?? 0;
+                                        break;
 
-                                case IdElementType.Random20Bit:
-                                    prefixLength += 7;
-                                    break;
+                                    case IdElementType.Random20Bit:
+                                        prefixLength += 5;
+                                        break;
 
-                                case IdElementType.Random32Bit:
-                                    prefixLength += 10;
-                                    break;
+                                    case IdElementType.Random32Bit:
+                                        prefixLength += 8;
+                                        break;
 
-                                case IdElementType.Random6Digit:
-                                    prefixLength += 6;
-                                    break;
+                                    case IdElementType.Random6Digit:
+                                        prefixLength += 6;
+                                        break;
 
-                                case IdElementType.Random9Digit:
-                                    prefixLength += 9;
-                                    break;
+                                    case IdElementType.Random9Digit:
+                                        prefixLength += 9;
+                                        break;
 
-                                case IdElementType.Guid:
-                                    prefixLength += 32;
-                                    break;
+                                    case IdElementType.Guid:
+                                        prefixLength += 32;
+                                        break;
 
-                                case IdElementType.DateTime:
-                                    prefixLength += 14;
-                                    break;
+                                    case IdElementType.DateTime:
+                                        prefixLength += 14;
+                                        break;
 
-                                case IdElementType.Sequence:
-                                    prefixLength += prev.Padding ?? 1;
-                                    break;
+                                    case IdElementType.Sequence:
+                                        prefixLength += prev.Padding ?? 1;
+                                        break;
+                                }
                             }
+
+                            var ids = await _context.Items
+                                .Where(i => i.InventoryId == inventoryId)
+                                .Select(i => i.CustomId)
+                                .ToListAsync();
+
+                            int maxSequence = 0;
+
+                            foreach (var id in ids)
+                            {
+                                if (id.Length >= prefixLength + sequenceLength)
+                                {
+                                    var seqPart = id.Substring(prefixLength, sequenceLength);
+
+                                    if (int.TryParse(seqPart, out int seq))
+                                    {
+                                        if (seq > maxSequence)
+                                            maxSequence = seq;
+                                    }
+                                }
+                            }
+
+                            int next = maxSequence + 1;
+
+                            sb.Append(next.ToString().PadLeft(sequenceLength, '0'));
+
+                            break;
                         }
-
-                        var lastId = await _context.Items
-                            .Where(i => i.InventoryId == inventoryId)
-                            .OrderByDescending(i => i.CustomId)
-                            .Select(i => i.CustomId)
-                            .FirstOrDefaultAsync();
-
-                        int next = 1;
-
-                        if (lastId != null && lastId.Length >= prefixLength + sequenceLength)
-                        {
-                            var seqPart = lastId.Substring(prefixLength, sequenceLength);
-
-                            if (int.TryParse(seqPart, out int parsed))
-                                next = parsed + 1;
-                        }
-
-                        sb.Append(next.ToString().PadLeft(sequenceLength, '0'));
-
-                        break;
                 }
             }
 
