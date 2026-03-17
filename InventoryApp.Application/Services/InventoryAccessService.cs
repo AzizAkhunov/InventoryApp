@@ -78,10 +78,17 @@ namespace InventoryApp.Application.Services
             if (inventory == null)
                 throw new Exception("Inventory not found");
 
-            var user = await _context.Users.FirstAsync(u => u.Id == ownerId);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == ownerId);
+
+            if (user == null)
+                throw new Exception("User not found");
 
             if (inventory.OwnerId != ownerId && !user.IsAdmin)
                 throw new UnauthorizedAccessException();
+
+            if (userId == inventory.OwnerId)
+                throw new Exception("Owner cannot be removed from access list");
 
             var access = await _context.InventoryAccesses
                 .FirstOrDefaultAsync(x => x.InventoryId == inventoryId && x.UserId == userId);
