@@ -54,5 +54,6 @@ namespace InventoryApp.Domain.Entities
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public ICollection<InventoryIdElement> IdElements { get; set; } = new List<InventoryIdElement>();
+        public string ApiToken { get; set; } = Guid.NewGuid().ToString();
     }
 }

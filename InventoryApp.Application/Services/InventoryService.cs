@@ -67,6 +67,7 @@ namespace InventoryApp.Application.Services
                     CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
+                    ApiToken = i.ApiToken,
                     ImageUrl = i.ImageUrl,
                     ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
 
