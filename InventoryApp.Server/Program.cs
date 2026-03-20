@@ -1,3 +1,4 @@
+using InventoryApp.Application.Common;
 using InventoryApp.Application.Interfaces;
 using InventoryApp.Application.Services;
 using InventoryApp.Infrastructure.Data;
@@ -91,7 +92,15 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 
+builder.Services.AddHttpClient<ISalesforceService, SalesforceService>();
+
 builder.Services.AddSignalR();
+
+builder.Services.Configure<SalesforceSettings>(
+    builder.Configuration.GetSection("Salesforce")
+);
+
+
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

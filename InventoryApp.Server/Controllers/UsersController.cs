@@ -1,5 +1,6 @@
 ﻿using InventoryApp.Application.DTO;
 using InventoryApp.Application.Extensions;
+using InventoryApp.Application.Interfaces;
 using InventoryApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,11 @@ namespace InventoryApp.Server.Controllers
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public UsersController(AppDbContext context)
+        private readonly ISalesforceService _salesforce;
+        public UsersController(AppDbContext context, ISalesforceService salesforce)
         {
             _context = context;
+            _salesforce = salesforce;
         }
 
         [HttpGet("search")]
@@ -38,6 +40,13 @@ namespace InventoryApp.Server.Controllers
                 .ToListAsync();
 
             return Ok(users);
+        }
+
+        [HttpPost("salesforce")]
+        public async Task<IActionResult> CreateSalesforce([FromBody] SalesforceDto dto)
+        {
+            await _salesforce.CreateAccountAsync(dto);
+            return Ok(new { success = true });
         }
     }
 }
