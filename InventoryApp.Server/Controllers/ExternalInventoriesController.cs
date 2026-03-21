@@ -1,12 +1,11 @@
 ﻿using InventoryApp.Application.Extensions;
 using InventoryApp.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryApp.Server.Controllers
 {
-    [Route("api/external/[controller]")]
+    [Route("api/external/inventories")]
     [ApiController]
     public class ExternalInventoriesController : ControllerBase
     {
