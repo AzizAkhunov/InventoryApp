@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryApp.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260321102817_addApiToken")]
-    partial class addApiToken
+    [Migration("20260321112319_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,25 +49,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 21, 10, 28, 17, 31, DateTimeKind.Utc).AddTicks(2864),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5326),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 21, 10, 28, 17, 31, DateTimeKind.Utc).AddTicks(2869),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5340),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 21, 10, 28, 17, 31, DateTimeKind.Utc).AddTicks(2870),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5342),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 3, 21, 10, 28, 17, 31, DateTimeKind.Utc).AddTicks(2871),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5343),
                             Name = "Other"
                         });
                 });

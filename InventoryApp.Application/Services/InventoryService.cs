@@ -17,20 +17,6 @@ namespace InventoryApp.Application.Services
 
         public async Task<List<InventoryDto>> GetAllAsync()
         {
-            var broken = await _context.Inventories
-                .Where(i => i.ApiToken == null || i.ApiToken == "")
-                .ToListAsync();
-
-            if (broken.Any())
-            {
-                foreach (var inv in broken)
-                {
-                    inv.ApiToken = Guid.NewGuid().ToString();
-                }
-
-                await _context.SaveChangesAsync();
-            }
-
             return await _context.Inventories
                 .Include(i => i.Category)
                 .Select(i => new InventoryDto
@@ -43,8 +29,6 @@ namespace InventoryApp.Application.Services
                     Version = i.Version,
                     ImageUrl = i.ImageUrl,
                     ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
-
-                    ApiToken = i.ApiToken ?? "",
 
                     CustomString1Enabled = i.CustomString1Enabled,
                     CustomString1Name = i.CustomString1Name,

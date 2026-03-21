@@ -85,6 +85,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     CustomBool2Name = table.Column<string>(type: "text", nullable: true),
                     CustomBool3Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     CustomBool3Name = table.Column<string>(type: "text", nullable: true),
+                    ApiToken = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -326,10 +327,10 @@ namespace InventoryApp.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8337), "Equipment" },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8342), "Furniture" },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8343), "Books" },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 12, 21, 19, 0, 242, DateTimeKind.Utc).AddTicks(8344), "Other" }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5326), "Equipment" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5340), "Furniture" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5342), "Books" },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5343), "Other" }
                 });
 
             migrationBuilder.InsertData(
