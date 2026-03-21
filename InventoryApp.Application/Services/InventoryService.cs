@@ -29,6 +29,7 @@ namespace InventoryApp.Application.Services
                     Version = i.Version,
                     ImageUrl = i.ImageUrl,
                     ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
+                    ApiToken = i.ApiToken,
 
                     CustomString1Enabled = i.CustomString1Enabled,
                     CustomString1Name = i.CustomString1Name,
@@ -112,6 +113,7 @@ namespace InventoryApp.Application.Services
                 OwnerId = userId,
                 IsPublic = dto.IsPublic,
                 Version = 1,
+                ApiToken = Guid.NewGuid().ToString(),
 
                 CustomString1Enabled = dto.CustomString1Enabled,
                 CustomString1Name = dto.CustomString1Name,

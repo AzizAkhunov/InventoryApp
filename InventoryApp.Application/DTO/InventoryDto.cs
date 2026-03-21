@@ -14,7 +14,7 @@
 
         public int ItemsCount { get; set; }
         public int Version { get; set; }
-        public string ApiToken { get; set; }
+        public string? ApiToken { get; set; }
 
         // Custom string fields
         public bool CustomString1Enabled { get; set; }
