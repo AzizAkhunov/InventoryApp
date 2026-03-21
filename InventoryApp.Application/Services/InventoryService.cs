@@ -29,7 +29,7 @@ namespace InventoryApp.Application.Services
                     Version = i.Version,
                     ImageUrl = i.ImageUrl,
                     ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
-                    ApiToken = i.ApiToken,
+                    ApiToken = i.ApiToken ?? "",
 
                     CustomString1Enabled = i.CustomString1Enabled,
                     CustomString1Name = i.CustomString1Name,
@@ -68,7 +68,7 @@ namespace InventoryApp.Application.Services
                     CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
-                    ApiToken = i.ApiToken,
+                    ApiToken = i.ApiToken ?? "",
                     ImageUrl = i.ImageUrl,
                     ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
 
