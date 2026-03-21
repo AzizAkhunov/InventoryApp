@@ -80,7 +80,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-
+builder.Services.AddScoped<IInventoryExternalService, InventoryExternalService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IInventoryAccessService, InventoryAccessService>();

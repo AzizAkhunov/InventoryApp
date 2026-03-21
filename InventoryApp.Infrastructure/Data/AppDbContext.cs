@@ -19,6 +19,7 @@ namespace InventoryApp.Infrastructure.Data
         public DbSet<InventoryIdElement> InventoryIdElements => Set<InventoryIdElement>();
         public DbSet<ItemLike> ItemLikes => Set<ItemLike>();
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<InventoryApiToken> InventoryApiTokens => Set<InventoryApiToken>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -192,6 +193,17 @@ namespace InventoryApp.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(p => p.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //Odoo
+            modelBuilder.Entity<InventoryApiToken>()
+                .HasOne(t => t.Inventory)
+                .WithMany(i => i.ApiTokens)
+                .HasForeignKey(t => t.InventoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<InventoryApiToken>()
+                .HasIndex(t => t.Token)
+                .IsUnique();
         }
     }
 }
