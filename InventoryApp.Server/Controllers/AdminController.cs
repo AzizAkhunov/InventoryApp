@@ -147,5 +147,12 @@ namespace InventoryApp.Server.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpDelete("reset-db")]
+        public async Task<IActionResult> ResetDb()
+        {
+            await _context.Database.ExecuteSqlRawAsync("DROP TABLE \"Inventories\" CASCADE;");
+            return Ok("Dropped");
+        }
     }
 }
