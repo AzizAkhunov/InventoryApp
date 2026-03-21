@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryApp.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260321112319_Init")]
+    [Migration("20260321115358_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -49,25 +49,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5326),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4252),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5340),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4257),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5342),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4259),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5343),
+                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4260),
                             Name = "Other"
                         });
                 });
@@ -480,7 +480,7 @@ namespace InventoryApp.Infrastructure.Migrations
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "admin@test.com",
+                            Email = "akhunovaziz735@gmail.com",
                             IsAdmin = true,
                             IsBlocked = false,
                             UserName = "admin"

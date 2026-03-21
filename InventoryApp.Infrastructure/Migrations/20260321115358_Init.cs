@@ -67,6 +67,7 @@ namespace InventoryApp.Infrastructure.Migrations
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Version = table.Column<int>(type: "integer", nullable: false),
+                    ApiToken = table.Column<string>(type: "text", nullable: false),
                     CustomString1Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     CustomString1Name = table.Column<string>(type: "text", nullable: true),
                     CustomString2Enabled = table.Column<bool>(type: "boolean", nullable: false),
@@ -85,7 +86,6 @@ namespace InventoryApp.Infrastructure.Migrations
                     CustomBool2Name = table.Column<string>(type: "text", nullable: true),
                     CustomBool3Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     CustomBool3Name = table.Column<string>(type: "text", nullable: true),
-                    ApiToken = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -327,16 +327,16 @@ namespace InventoryApp.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5326), "Equipment" },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5340), "Furniture" },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5342), "Books" },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 21, 11, 23, 18, 851, DateTimeKind.Utc).AddTicks(5343), "Other" }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4252), "Equipment" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4257), "Furniture" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4259), "Books" },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4260), "Other" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "Email", "IsAdmin", "IsBlocked", "UserName" },
-                values: new object[] { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@test.com", true, false, "admin" });
+                values: new object[] { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "akhunovaziz735@gmail.com", true, false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",

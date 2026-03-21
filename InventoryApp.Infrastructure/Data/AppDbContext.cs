@@ -45,7 +45,7 @@ namespace InventoryApp.Infrastructure.Data
                 new User
                     {
                         Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                        Email = "admin@test.com",
+                        Email = "akhunovaziz735@gmail.com",
                         UserName = "admin",
                         IsAdmin = true,
                         IsBlocked = false,
