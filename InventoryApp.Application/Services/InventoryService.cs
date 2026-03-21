@@ -67,7 +67,6 @@ namespace InventoryApp.Application.Services
                     CategoryName = i.Category.Name,
                     IsPublic = i.IsPublic,
                     Version = i.Version,
-                    ApiToken = i.ApiToken ?? "",
                     ImageUrl = i.ImageUrl,
                     ItemsCount = _context.Items.Count(x => x.InventoryId == i.Id),
 
@@ -112,8 +111,6 @@ namespace InventoryApp.Application.Services
                 OwnerId = userId,
                 IsPublic = dto.IsPublic,
                 Version = 1,
-
-                ApiToken = Guid.NewGuid().ToString(),
 
                 CustomString1Enabled = dto.CustomString1Enabled,
                 CustomString1Name = dto.CustomString1Name,
@@ -169,8 +166,6 @@ namespace InventoryApp.Application.Services
 
             dto.Id = inventory.Id;
             dto.Version = inventory.Version;
-
-            dto.ApiToken = inventory.ApiToken;
 
             return dto;
         }

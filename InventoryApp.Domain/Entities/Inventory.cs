@@ -17,7 +17,7 @@ namespace InventoryApp.Domain.Entities
         public Guid OwnerId { get; set; }
         public User Owner { get; set; } = null!;
         public int Version { get; set; }
-        public string ApiToken { get; set; } = Guid.NewGuid().ToString();
+
         // ===== Custom STRING fields =====
         public bool CustomString1Enabled { get; set; }
         public string? CustomString1Name { get; set; }
