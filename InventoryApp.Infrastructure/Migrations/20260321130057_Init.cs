@@ -67,7 +67,6 @@ namespace InventoryApp.Infrastructure.Migrations
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Version = table.Column<int>(type: "integer", nullable: false),
-                    ApiToken = table.Column<string>(type: "text", nullable: false),
                     CustomString1Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     CustomString1Name = table.Column<string>(type: "text", nullable: true),
                     CustomString2Enabled = table.Column<bool>(type: "boolean", nullable: false),
@@ -327,10 +326,10 @@ namespace InventoryApp.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4252), "Equipment" },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4257), "Furniture" },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4259), "Books" },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4260), "Other" }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6083), "Equipment" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6090), "Furniture" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6092), "Books" },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6093), "Other" }
                 });
 
             migrationBuilder.InsertData(

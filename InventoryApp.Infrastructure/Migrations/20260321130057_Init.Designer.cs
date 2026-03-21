@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryApp.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260321115358_Init")]
+    [Migration("20260321130057_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -49,25 +49,25 @@ namespace InventoryApp.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4252),
+                            CreatedAt = new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6083),
                             Name = "Equipment"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4257),
+                            CreatedAt = new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6090),
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4259),
+                            CreatedAt = new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6092),
                             Name = "Books"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 3, 21, 11, 53, 58, 301, DateTimeKind.Utc).AddTicks(4260),
+                            CreatedAt = new DateTime(2026, 3, 21, 13, 0, 57, 148, DateTimeKind.Utc).AddTicks(6093),
                             Name = "Other"
                         });
                 });
@@ -133,10 +133,6 @@ namespace InventoryApp.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("ApiToken")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");

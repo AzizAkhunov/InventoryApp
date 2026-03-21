@@ -202,23 +202,23 @@ namespace InventoryApp.Server.Controllers
             return Ok(inventories);
         }
 
-        [HttpGet("by-token/{token}")]
-        public async Task<IActionResult> GetByToken(string token)
-        {
-            var inventory = await _context.Inventories
-                .Include(i => i.Items)
-                .FirstOrDefaultAsync(i => i.ApiToken == token);
+        //[HttpGet("by-token/{token}")]
+        //public async Task<IActionResult> GetByToken(string token)
+        //{
+        //    var inventory = await _context.Inventories
+        //        .Include(i => i.Items)
+        //        .FirstOrDefaultAsync(i => i.ApiToken == token);
 
-            if (inventory == null)
-                return NotFound();
+        //    if (inventory == null)
+        //        return NotFound();
 
-            var stats = await _inventoryService.GetStatisticsAsync(inventory.Id);
+        //    var stats = await _inventoryService.GetStatisticsAsync(inventory.Id);
 
-            return Ok(new
-            {
-                title = inventory.Title,
-                statistics = stats
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        title = inventory.Title,
+        //        statistics = stats
+        //    });
+        //}
     }
 }
