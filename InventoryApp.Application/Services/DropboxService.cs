@@ -35,10 +35,10 @@ namespace InventoryApp.Application.Services
             request.Headers.Authorization =
                 new AuthenticationHeaderValue("Bearer", _settings.AccessToken);
 
-            request.Headers.Add("Dropbox-API-Arg",
-                $"{{\"path\":\"{dropboxPath}\",\"mode\":\"add\",\"autorename\":true,\"mute\":false}}");
-
-            request.Headers.Add("Content-Type", "application/octet-stream");
+            request.Headers.Add(
+                "Dropbox-API-Arg",
+                $"{{\"path\":\"{dropboxPath}\",\"mode\":\"add\",\"autorename\":true,\"mute\":false}}"
+            );
 
             request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(jsonContent));
             request.Content.Headers.ContentType =
