@@ -93,12 +93,18 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddHttpClient<ISalesforceService, SalesforceService>();
+builder.Services.AddHttpClient<IDropboxService, DropboxService>();
 
 builder.Services.AddSignalR();
 
 builder.Services.Configure<SalesforceSettings>(
     builder.Configuration.GetSection("Salesforce")
 );
+
+builder.Services.Configure<DropboxSettings>(
+    builder.Configuration.GetSection("Dropbox")
+);
+
 
 
 
