@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 
 public class SalesforceService : ISalesforceService
 {
@@ -48,7 +47,6 @@ public class SalesforceService : ISalesforceService
         _http.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", accessToken);
 
-
         var account = new
         {
             Name = dto.Company,
@@ -74,6 +72,8 @@ public class SalesforceService : ISalesforceService
             LastName = dto.LastName,
             FirstName = dto.FirstName,
             Email = dto.Email,
+            Phone = dto.Phone,
+            Title = dto.Title,
             AccountId = accountId
         };
 
